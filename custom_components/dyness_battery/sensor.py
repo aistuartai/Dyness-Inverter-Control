@@ -1,4 +1,5 @@
 """Sensoren für Dyness Battery Integration."""
+import logging
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
     PERCENTAGE, UnitOfPower, UnitOfElectricCurrent, UnitOfEnergy,
@@ -8,6 +9,8 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import DOMAIN
+
+_LOGGER = logging.getLogger(__name__)
 
 # (key, translation_key, unit, device_class, state_class, icon, precision, entity_category)
 _D = EntityCategory.DIAGNOSTIC
