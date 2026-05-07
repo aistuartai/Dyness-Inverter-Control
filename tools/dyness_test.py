@@ -1,5 +1,5 @@
 """
-Dyness API Tester v3
+Dyness API Tester v3.1
 Testet alle bekannten Endpunkte der Dyness Open API.
 
 Verwendung:
@@ -333,7 +333,7 @@ def analyze_running_data(result: dict):
 
 # ── Auto-Discovery ────────────────────────────────────────────────────────────
 print(SEP)
-print("Dyness API Tester v3 — Auto-Discovery")
+print("Dyness API Tester v3.1 — Auto-Discovery")
 print(SEP)
 print()
 
@@ -403,8 +403,12 @@ print()
 
 # Sub-Module ermitteln
 sub_sns = []
+bdu_suffix_sns = []  # BDU-01, BDU-02 etc. — separat abfragen
 if sub_raw:
     candidates = [s.strip() for s in str(sub_raw).split(",") if s.strip()]
+    # BDU-XX Suffixe (Tower T21/TP7 Sub-Module) separat sammeln
+    bdu_suffix_sns = [s for s in candidates if re.search(r'-BDU-\d+$', s)]
+    # Standard Sub-Module (numerische SNs, kein BMS/BDU Suffix)
     filtered = [s for s in candidates
                 if not s.endswith(("-BMS", "-BDU"))
                 and not re.search(r'-BDU-\d+$', s)]
@@ -414,7 +418,10 @@ if sub_raw:
     elif len(filtered) == 1:
         print(f"► 1 Sub-Modul gefunden ({filtered[0]}) — kein separater Abruf nötig (Junior Box / Einzelmodul)")
     else:
-        print("► Keine abfragbaren Sub-Module im SUB Point.")
+        print("► Keine Standard Sub-Module im SUB Point.")
+    if bdu_suffix_sns:
+        print(f"► {len(bdu_suffix_sns)} BDU-Suffix Sub-Module erkannt (Tower T21/TP7): {bdu_suffix_sns}")
+        print(f"   → Werden separat abgefragt um Cell-Daten zu prüfen")
 else:
     print("► SUB Point leer — kein Multi-Modul Setup.")
 print()
@@ -438,6 +445,26 @@ for sn in sub_sns:
     print_result(f"realTime/data Sub-Modul {sn}", "/v1/device/realTime/data", m_body, res)
     m_pts = get_rt_points(res)
     analyze_rt_points(m_pts, f"Sub-Modul {sn}")
+
+# ── BDU-Suffix Sub-Module abfragen (Tower T21 / TP7) ─────────────────────────
+if bdu_suffix_sns:
+    print(SEP)
+    print(f"BDU-Suffix Sub-Module ({len(bdu_suffix_sns)} Stück) — Cell-Daten Prüfung")
+    print("Hinweis: Es werden alle abgefragt. Leere Antworten bedeuten keine API-Unterstützung.")
+    print(SEP)
+    for sn in bdu_suffix_sns:
+        m_body = {"deviceSn": sn}
+        if dongle_sn:
+            m_body["collectorSn"] = dongle_sn
+        res = api_call("/v1/device/realTime/data", m_body)
+        m_pts = get_rt_points(res)
+        if m_pts:
+            print(f"✅ {sn}: {len(m_pts)} Points — Cell-Daten vorhanden!")
+            analyze_rt_points(m_pts, f"BDU Sub-Modul {sn}")
+        else:
+            print(f"⚠️  {sn}: Keine Daten — API unterstützt diesen Sub-Modul-Abruf nicht")
+            print(f"   Raw response: {json.dumps(res, ensure_ascii=False)[:200]}")
+        print()
 
 # ── Weitere Standard-Endpunkte ────────────────────────────────────────────────
 res_running = api_call("/v1/device/getLastRunningDataBySn", body_sn)
