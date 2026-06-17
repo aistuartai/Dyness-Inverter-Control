@@ -1159,7 +1159,7 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                         # gridPower: API positive=exporting, negate for HA convention (positive=importing)
                         gp = _to_float(rd.get("gridPower"))
                         if gp is not None:
-                            data["gridPower"] = -gp
+                            data["gridPower"] = -gp if gp != 0 else 0
 
                         # Energie
                         for key, rdkey in [
@@ -1256,13 +1256,17 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                     # ── v2 API Felder ─────────────────────────────────────────
                     if self.v2_realtime_data:
                         for key, v2key in [
-                            ("backupLoadPower",    "backupLoadPower"),
-                            ("thirdPartyInvPower", "thirdPartyInvPower"),
-                            ("inverterTotalPower", "inverterTotalPower"),
-                            ("reactivePower",      "reactivePower"),
-                            ("apparentPower",      "apparentPower"),
-                            ("sparePower",         "sparePower"),
-                            ("powerLimitActive",   "powerLimitActive"),
+                            ("backupLoadPower",          "backupLoadPower"),
+                            ("thirdPartyInvPower",       "thirdPartyInvPower"),
+                            ("inverterTotalPower",       "inverterTotalPower"),
+                            ("reactivePower",            "reactivePower"),
+                            ("apparentPower",            "apparentPower"),
+                            ("onGridDischargeDepth",     "onGridDischargeDepth"),
+                            ("offGridDischargeDepth",    "offGridDischargeDepth"),
+                            ("bmsCommunicationStatus",   "bmsCommunicationStatus"),
+                            ("bmsSoftwareVersion",       "bmsSoftwareVersion"),
+                            ("meterType",                "meterType"),
+                            ("meterCommunicationStatus", "meterCommunicationStatus"),
                         ]:
                             v = _to_float(self.v2_realtime_data.get(v2key))
                             if v is not None:
@@ -1270,12 +1274,8 @@ class DynessDataCoordinator(DataUpdateCoordinator):
 
                     if self.v2_status_data:
                         for key, v2key in [
-                            ("onGridDischargeDepth",      "onGridDischargeDepth"),
-                            ("offGridDischargeDepth",     "offGridDischargeDepth"),
-                            ("bmsCommunicationStatus",    "bmsCommunicationStatus"),
-                            ("bmsSoftwareVersion",        "bmsSoftwareVersion"),
-                            ("meterType",                 "meterType"),
-                            ("meterCommunicationStatus",  "meterCommunicationStatus"),
+                            ("sparePower",       "sparePower"),
+                            ("powerLimitActive", "powerLimit"),
                         ]:
                             v = self.v2_status_data.get(v2key)
                             if v is not None:
