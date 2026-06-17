@@ -1,0 +1,37 @@
+set_tou_schedule:
+  name: Set TOU Schedule
+  description: >
+    Send a full TOU (Time of Use / Economic mode) schedule to the Cygni inverter.
+    Automatically switches the inverter to TOU mode (work mode 3).
+    All active groups must be included — unused groups should have enabled: false.
+  fields:
+    groups:
+      name: Groups
+      description: >
+        List of up to 4 TOU groups. Each group defines a time window and charge/discharge behaviour.
+      required: true
+      example:
+        - group: 1
+          enabled: true
+          start_time: "22:00"
+          end_time: "07:00"
+          mode: charge
+          power: 2000
+          days: "0,1,2,3,4,5,6"
+          dod_enabled: true
+          dod: 20
+          soc_max_enabled: true
+          soc_max: 100
+        - group: 2
+          enabled: false
+          start_time: "00:00"
+          end_time: "00:00"
+          mode: discharge
+          power: 0
+          days: "0,1,2,3,4,5,6"
+          dod_enabled: false
+          dod: 20
+          soc_max_enabled: false
+          soc_max: 100
+      selector:
+        object:

@@ -202,6 +202,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    async def _handle_set_tou_schedule(call) -> None:
+        groups = call.data.get("groups", [])
+        await coordinator.async_set_tou_schedule(groups)
+
+    hass.services.async_register(
+        DOMAIN, "set_tou_schedule", _handle_set_tou_schedule
+    )
+
     return True
 
 
@@ -376,6 +385,56 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                 f"Dyness SetWorkModeSetting failed: {result.get('info', result)}"
             )
         _LOGGER.info("Dyness SetWorkMode: success (device %s)", self.device_sn)
+        await self.async_request_refresh()
+
+    async def async_set_tou_schedule(self, groups: list) -> None:
+        """Send full TOU schedule. Always switches to TOU mode (workMode=3)."""
+        if not isinstance(groups, list) or not groups:
+            raise HomeAssistantError("groups must be a non-empty list")
+
+        api_groups = []
+        for g in groups:
+            group_num = int(g["group"])
+            if group_num not in (1, 2, 3, 4):
+                raise HomeAssistantError(f"group must be 1-4, got {group_num}")
+            power = int(g.get("power", 0))
+            if not 0 <= power <= 2000:
+                raise HomeAssistantError(f"power must be 0-2000W, got {power}")
+            dod = int(g.get("dod", 20))
+            if not 0 <= dod <= 95:
+                raise HomeAssistantError(f"dod must be 0-95%, got {dod}")
+            soc_max = int(g.get("soc_max", 100))
+            if not 10 <= soc_max <= 100:
+                raise HomeAssistantError(f"soc_max must be 10-100%, got {soc_max}")
+            api_groups.append({
+                "batteryWorkGroup": group_num,
+                "state":            "0" if g.get("enabled", True) else "1",
+                "startTime":        str(g["start_time"]),
+                "endTime":          str(g["end_time"]),
+                "power":            str(power),
+                "mode":             "0" if str(g.get("mode", "charge")).lower() == "charge" else "1",
+                "week":             str(g.get("days", "0,1,2,3,4,5,6")),
+                "dodState":         "0" if g.get("dod_enabled", True) else "1",
+                "dod":              str(dod),
+                "socMaxChargeState": "0" if g.get("soc_max_enabled", True) else "1",
+                "batterySocMaxCharge": str(soc_max),
+            })
+
+        session = async_get_clientsession(self.hass)
+        _LOGGER.info(
+            "Dyness SetTOUSchedule: sending %d group(s) to device %s",
+            len(api_groups), self.device_sn,
+        )
+        result = await self._call_v2(session, "/v2/SetWorkModeSetting", {
+            "deviceSn":   self.device_sn,
+            "workMode":   "3",
+            "workGroups": api_groups,
+        })
+        if not _is_success(result):
+            raise HomeAssistantError(
+                f"Dyness SetTOUSchedule failed: {result.get('info', result)}"
+            )
+        _LOGGER.info("Dyness SetTOUSchedule: success (device %s)", self.device_sn)
         await self.async_request_refresh()
 
     def _update_scan_interval(self):
