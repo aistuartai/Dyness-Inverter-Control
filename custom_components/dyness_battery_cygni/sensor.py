@@ -134,6 +134,10 @@ ALWAYS_REGISTER = {
     "batteryChargeToday", "batteryDischargeToday",
     "tempInternal", "tempModule", "tempHeatSink",
     "gridStatus", "runModel", "gridVoltage", "gridCurrent", "gridFrequency",
+    "backupLoadPower", "thirdPartyInvPower", "inverterTotalPower",
+    "reactivePower", "apparentPower", "sparePower", "powerLimitActive",
+    "onGridDischargeDepth", "offGridDischargeDepth",
+    "bmsCommunicationStatus", "meterType", "meterCommunicationStatus",
 }
 
 # Alarm-Sensoren die nur für bestimmte Schemas implementiert sind.
