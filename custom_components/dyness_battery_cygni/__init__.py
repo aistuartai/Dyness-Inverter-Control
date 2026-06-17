@@ -305,11 +305,11 @@ class DynessDataCoordinator(DataUpdateCoordinator):
         return {}
 
     async def _call_v2(self, session: aiohttp.ClientSession, path: str, body_dict: dict) -> dict:
-        """Rate-limitierter v2-API-Aufruf (URL-Prefix ohne Bindestrich)."""
+        """v2 API call — same base host as v1, same /openapi/ems-device path prefix."""
         elapsed = time.monotonic() - self._last_call_time
         if elapsed < _MIN_CALL_INTERVAL:
             await asyncio.sleep(_MIN_CALL_INTERVAL - elapsed)
-        url = f"{self.api_base}/openapi/emsdevice{path}"
+        url = f"{self.api_base}/openapi/ems-device{path}"
         body = json.dumps(body_dict, separators=(',', ':'))
         for attempt in range(_MAX_RETRIES + 1):
             self._last_call_time = time.monotonic()
@@ -576,7 +576,13 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                                 session, "/v2/GetRealTimeDataBySN", v2_body
                             )
                             if _is_success(v2_result):
-                                self.v2_realtime_data = v2_result.get("data", {}) or {}
+                                # Response is nested: flatten all sub-dicts into one dict
+                                raw = v2_result.get("data", {}) or {}
+                                flat: dict = {}
+                                for v in raw.values():
+                                    if isinstance(v, dict):
+                                        flat.update(v)
+                                self.v2_realtime_data = flat
                             elif v2_result.get("status") == 404 or v2_result.get("code") == "404":
                                 _LOGGER.info("Dyness v2 API not available on this server/account — skipping v2 sensors")
                                 self._v2_unavailable = True
