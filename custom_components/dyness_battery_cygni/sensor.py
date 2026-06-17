@@ -107,7 +107,7 @@ SENSORS = [
     ("inverterTotalPower",       "inverter_total_power",       UnitOfPower.WATT,                 SensorDeviceClass.POWER,          SensorStateClass.MEASUREMENT,      "mdi:home-lightning-bolt",    None, None),
     ("reactivePower",            "reactive_power",             UnitOfReactivePower.VOLT_AMPERE_REACTIVE, SensorDeviceClass.REACTIVE_POWER, SensorStateClass.MEASUREMENT, "mdi:sine-wave",       None, None),
     ("apparentPower",            "apparent_power",             UnitOfApparentPower.VOLT_AMPERE,  SensorDeviceClass.APPARENT_POWER, SensorStateClass.MEASUREMENT,      "mdi:sine-wave",              None, None),
-    ("sparePower",               "spare_power",                UnitOfPower.WATT,                 SensorDeviceClass.POWER,          SensorStateClass.MEASUREMENT,      "mdi:lightning-bolt",         None, _D),
+    ("sparePower",               "backup_port_active",         None,                             None,                             None,                              "mdi:power-socket",           None, _D),
     ("powerLimitActive",         "power_limit_active",         None,                             None,                             None,                              "mdi:speedometer",            None, _D),
     ("onGridDischargeDepth",     "on_grid_discharge_depth",    PERCENTAGE,                       None,                             SensorStateClass.MEASUREMENT,      "mdi:battery-arrow-down",     None, _D),
     ("offGridDischargeDepth",    "off_grid_discharge_depth",   PERCENTAGE,                       None,                             SensorStateClass.MEASUREMENT,      "mdi:battery-arrow-down",     None, _D),

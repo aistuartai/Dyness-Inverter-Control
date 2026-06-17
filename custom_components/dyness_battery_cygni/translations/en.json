@@ -301,8 +301,8 @@
       "apparent_power": {
         "name": "Apparent Power"
       },
-      "spare_power": {
-        "name": "Spare Power"
+      "backup_port_active": {
+        "name": "Backup Port Active"
       },
       "power_limit_active": {
         "name": "Power Limit Active"

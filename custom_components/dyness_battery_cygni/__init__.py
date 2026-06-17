@@ -1139,8 +1139,8 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                         _GRID_STATUS = {"0": "Off Grid", "1": "On Grid"}
                         _RUN_MODE    = {"0": "Self-use", "1": "Feed-in Priority", "2": "Backup", "3": "TOU (Time of Use)"}
                         _INV_STATUS  = {
-                            "0": "Standby", "1": "Running", "2": "Fault",
-                            "3": "Off-Grid", "4": "Charging", "5": "Discharging",
+                            "0": "Waiting", "1": "Grid-Connected", "2": "Off-Grid",
+                            "3": "Fault", "4": "Programming", "5": "Detection",
                         }
 
                         # Leistung
@@ -1254,6 +1254,11 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                         pass
 
                     # ── v2 API Felder ─────────────────────────────────────────
+                    _COMM_STATUS   = {"0": "Normal", "1": "Abnormal"}
+                    _METER_TYPE    = {"1": "CT", "2": "Smart Meter"}
+                    _ON_OFF        = {"0": "Off", "1": "On"}
+                    _POWER_LIMIT   = {"0": "Not Limited", "1": "Limiting"}
+
                     if self.v2_realtime_data:
                         for key, v2key in [
                             ("backupLoadPower",          "backupLoadPower"),
@@ -1263,23 +1268,28 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                             ("apparentPower",            "apparentPower"),
                             ("onGridDischargeDepth",     "onGridDischargeDepth"),
                             ("offGridDischargeDepth",    "offGridDischargeDepth"),
-                            ("bmsCommunicationStatus",   "bmsCommunicationStatus"),
-                            ("bmsSoftwareVersion",       "bmsSoftwareVersion"),
-                            ("meterType",                "meterType"),
-                            ("meterCommunicationStatus", "meterCommunicationStatus"),
                         ]:
                             v = _to_float(self.v2_realtime_data.get(v2key))
                             if v is not None:
                                 data[key] = v
 
+                        # String-mapped fields from v2 realtime
+                        raw = self.v2_realtime_data
+                        if raw.get("bmsCommunicationStatus") is not None:
+                            data["bmsCommunicationStatus"] = _COMM_STATUS.get(str(raw["bmsCommunicationStatus"]), raw["bmsCommunicationStatus"])
+                        if raw.get("bmsSoftwareVersion") is not None:
+                            data["bmsSoftwareVersion"] = raw["bmsSoftwareVersion"]
+                        if raw.get("meterType") is not None:
+                            data["meterType"] = _METER_TYPE.get(str(raw["meterType"]), raw["meterType"])
+                        if raw.get("meterCommunicationStatus") is not None:
+                            data["meterCommunicationStatus"] = _COMM_STATUS.get(str(raw["meterCommunicationStatus"]), raw["meterCommunicationStatus"])
+
                     if self.v2_status_data:
-                        for key, v2key in [
-                            ("sparePower",       "sparePower"),
-                            ("powerLimitActive", "powerLimit"),
-                        ]:
-                            v = self.v2_status_data.get(v2key)
-                            if v is not None:
-                                data[key] = v
+                        sd = self.v2_status_data
+                        if sd.get("sparePower") is not None:
+                            data["sparePower"] = _ON_OFF.get(str(sd["sparePower"]), sd["sparePower"])
+                        if sd.get("powerLimit") is not None:
+                            data["powerLimitActive"] = _POWER_LIMIT.get(str(sd["powerLimit"]), sd["powerLimit"])
 
                     # ── Alarm-Text Dekodierung ────────────────────────────────
                     _ALARM_BITS_1 = {
