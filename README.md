@@ -1,3 +1,63 @@
+# Dyness Battery – Cygni Personal Fork
+
+> ## ⚠️ EXPERIMENTAL — NOT FOR RELEASE ⚠️
+>
+> **THIS IS A PERSONAL TEST FORK. DO NOT USE IN PRODUCTION.**
+>
+> This repository contains **untested, experimental modifications** to the Dyness Battery Home Assistant integration, specifically targeting the **Cygni HA/HS inverter series** and early exploration of cloud API control features.
+>
+> - Code may be **incomplete, incorrect, or unstable**
+> - Changes have **not been reviewed or tested beyond a single setup**
+> - No support is provided — use entirely at your own risk
+> - **Do not install via HACS or share this link as a working integration**
+
+---
+
+## Credits & Original Work
+
+This fork is based entirely on the excellent work of **shopf**:
+
+> **[shopf/dyness_battery](https://github.com/shopf/dyness_battery)** — the original, maintained, and HACS-listed Dyness Battery integration for Home Assistant.
+
+All core architecture, API handling, schema detection, and device support is the work of the original author. This fork applies personal patches on top of that foundation.
+
+If you are looking for a working Dyness Battery integration, **use the original repo**, not this one.
+
+---
+
+## What This Fork Adds (Experimental)
+
+Applied on top of upstream — Cygni 10.0HS-M8 specific:
+
+| Change | Status |
+|--------|--------|
+| `pv4Power` sensor | Added |
+| Grid power sign fix (`gridPower` field, negated for HA convention) | Applied |
+| Battery status recalculated after `running_data` applied | Applied |
+| Battery voltage & count from `running_data` | Added |
+| Cygni battery energy totals from realtime data points (195–200) | Added |
+| v2 API calls (`GetRealTimeDataBySN`, `GetStatusInfBySN`) | Added |
+| 13 new v2 API sensors (backup load, reactive/apparent power, discharge depth, BMS/meter status, etc.) | Added |
+| Expanded `ALWAYS_REGISTER` | Applied |
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE).
+
+Original copyright © 2026 shopf. Modifications are made under the terms of the same MIT License, which permits modification and redistribution with attribution.
+
+This fork retains the original copyright notice as required by the license.
+
+---
+
+## Original README
+
+The full original documentation follows below.
+
+---
+
 # Dyness Battery – Home Assistant Integration
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
