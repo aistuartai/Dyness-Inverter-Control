@@ -6,6 +6,7 @@ import logging
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -45,6 +46,7 @@ class DynessWorkModeSelect(CoordinatorEntity, SelectEntity):
         super().__init__(coordinator)
         self._entry = entry
         self._attr_unique_id = f"{entry.entry_id}_work_mode_select"
+        self._optimistic_option: str | None = None  # holds pending state until coordinator confirms
 
     @property
     def device_info(self):
@@ -59,26 +61,51 @@ class DynessWorkModeSelect(CoordinatorEntity, SelectEntity):
 
     @property
     def available(self) -> bool:
-        return self.coordinator.last_update_success and self.current_option is not None
+        return self.coordinator.last_update_success
 
-    @property
-    def current_option(self) -> str | None:
+    def _option_from_coordinator(self) -> str | None:
         data = self.coordinator.data or {}
         raw = data.get("runModel")
         if raw is None:
             return None
-        # runModel is already mapped to a label string by __init__.py
-        # but if it comes through as a numeric string, map it
         if raw in WORK_MODE_LABELS:
             return WORK_MODE_LABELS[raw]
-        # Already a label
         if raw in WORK_MODE_OPTIONS:
             return raw
         return None
 
+    @property
+    def current_option(self) -> str | None:
+        # Clear optimistic state once coordinator confirms the change
+        confirmed = self._option_from_coordinator()
+        if self._optimistic_option is not None:
+            if confirmed == self._optimistic_option:
+                self._optimistic_option = None
+            else:
+                return self._optimistic_option
+        return confirmed
+
     async def async_select_option(self, option: str) -> None:
         """Called when the user picks a new option in the UI."""
         if option not in WORK_MODE_OPTIONS:
-            raise ValueError(f"Invalid work mode option: {option}")
+            raise HomeAssistantError(f"Invalid work mode option: {option}")
+
         api_value = WORK_MODE_OPTIONS[option]
-        await self.coordinator.async_set_work_mode(api_value)
+        _LOGGER.debug("DynessWorkModeSelect: selecting '%s' (api value '%s')", option, api_value)
+
+        # Optimistically update the UI immediately
+        self._optimistic_option = option
+        self.async_write_ha_state()
+
+        try:
+            await self.coordinator.async_set_work_mode(api_value)
+        except HomeAssistantError:
+            # Revert optimistic state on failure
+            self._optimistic_option = None
+            self.async_write_ha_state()
+            raise
+        except Exception as err:
+            self._optimistic_option = None
+            self.async_write_ha_state()
+            _LOGGER.error("DynessWorkModeSelect: unexpected error: %s", err, exc_info=True)
+            raise HomeAssistantError(f"Failed to set work mode: {err}") from err
