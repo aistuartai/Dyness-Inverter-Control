@@ -432,14 +432,14 @@
   "config": {
     "step": {
       "select_device": {
-        "title": "Dyness Battery – Select Device",
+        "title": "Dyness Battery - Cygni Control – Select Device",
         "description": "{count} devices found on your account. Please select the battery you want to add. You can add the integration again to set up additional devices.",
         "data": {
           "device_sn": "Device"
         }
       },
       "user": {
-        "title": "Dyness Battery",
+        "title": "Dyness Battery - Cygni Control",
         "description": "Enter your Dyness API credentials. Select your region and the device will be discovered automatically.",
         "data": {
           "api_id": "API ID",
@@ -448,7 +448,7 @@
         }
       },
       "manual": {
-        "title": "Dyness Battery – Manual Setup",
+        "title": "Dyness Battery - Cygni Control – Manual Setup",
         "description": "Enter your API credentials, region and device serial numbers.",
         "data": {
           "api_id": "API ID",
