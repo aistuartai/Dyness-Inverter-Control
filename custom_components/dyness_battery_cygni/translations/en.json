@@ -427,6 +427,16 @@
       "data_update_time": {
         "name": "Data Timestamp"
       }
+    },
+    "select": {
+      "work_mode_select": {
+        "name": "Work Mode",
+        "state": {
+          "Self-use": "Self-use",
+          "Backup": "Backup",
+          "TOU (Time of Use)": "TOU (Time of Use)"
+        }
+      }
     }
   },
   "config": {

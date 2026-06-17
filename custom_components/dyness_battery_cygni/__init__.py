@@ -16,12 +16,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.const import Platform
 
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = "dyness_battery_cygni"
-PLATFORMS = [Platform.SENSOR]
+PLATFORMS = [Platform.SENSOR, Platform.SELECT]
 
 # Entitäten die in früheren Versionen existierten aber entfernt wurden.
 # Diese werden beim Setup automatisch aus der Entity-Registry gelöscht.
@@ -349,6 +350,33 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                     continue
                 raise
         return {}
+
+    # ── Control methods ───────────────────────────────────────────────────────
+
+    async def async_set_work_mode(self, mode: str) -> None:
+        """Set inverter work mode. mode: '0'=Self-use, '2'=Backup, '3'=TOU."""
+        allowed = {"0", "2", "3"}
+        if mode not in allowed:
+            raise HomeAssistantError(
+                f"Work mode '{mode}' not allowed. Permitted values: {allowed}. "
+                "Off-grid mode (1) must be set manually on the inverter."
+            )
+        session = async_get_clientsession(self.hass)
+        old_mode = (self.data or {}).get("runModel", "unknown")
+        _LOGGER.info(
+            "Dyness SetWorkMode: %s → mode %s (device %s)", old_mode, mode, self.device_sn
+        )
+        result = await self._call_v2(session, "/v2/SetWorkModeSetting", {
+            "deviceSn": self.device_sn,
+            "workMode": mode,
+            "workGroups": [],
+        })
+        if not _is_success(result):
+            raise HomeAssistantError(
+                f"Dyness SetWorkModeSetting failed: {result.get('info', result)}"
+            )
+        _LOGGER.info("Dyness SetWorkMode: success (device %s)", self.device_sn)
+        await self.async_request_refresh()
 
     def _update_scan_interval(self):
         """Passt das Scan-Intervall dynamisch an die Modulanzahl an."""
