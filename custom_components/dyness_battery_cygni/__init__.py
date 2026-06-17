@@ -1127,7 +1127,11 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                     rd = self.running_data
                     if rd:
                         _GRID_STATUS = {"0": "Off Grid", "1": "On Grid"}
-                        _RUN_MODE    = {"0": "Self-use", "1": "Feed-in Priority", "2": "Backup", "3": "Manual"}
+                        _RUN_MODE    = {"0": "Self-use", "1": "Feed-in Priority", "2": "Backup", "3": "TOU (Time of Use)"}
+                        _INV_STATUS  = {
+                            "0": "Standby", "1": "Running", "2": "Fault",
+                            "3": "Off-Grid", "4": "Charging", "5": "Discharging",
+                        }
 
                         # Leistung
                         for key, rdkey in [
@@ -1175,7 +1179,7 @@ class DynessDataCoordinator(DataUpdateCoordinator):
                         # Grid / Status
                         data["gridStatus"]         = _GRID_STATUS.get(str(rd.get("gridStatus", "")), rd.get("gridStatus"))
                         data["runModel"]           = _RUN_MODE.get(str(rd.get("runModel", "")), rd.get("runModel"))
-                        data["inverterWorkStatus"] = rd.get("workStatus")
+                        data["inverterWorkStatus"] = _INV_STATUS.get(str(rd.get("workStatus", "")), rd.get("workStatus"))
 
                         # Grid Messung
                         for key, rdkey in [
