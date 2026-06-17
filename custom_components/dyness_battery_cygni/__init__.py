@@ -22,7 +22,14 @@ from homeassistant.const import Platform
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = "dyness_battery_cygni"
-PLATFORMS = [Platform.SENSOR, Platform.SELECT]
+PLATFORMS = [
+    Platform.SENSOR,
+    Platform.SELECT,
+    Platform.SWITCH,
+    Platform.NUMBER,
+    Platform.TIME,
+    Platform.BUTTON,
+]
 
 # Entitäten die in früheren Versionen existierten aber entfernt wurden.
 # Diese werden beim Setup automatisch aus der Entity-Registry gelöscht.

@@ -11,6 +11,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import DOMAIN
+from .tou_entities import TouModeSelect, TouDaysSelect
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,7 +31,13 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities
 ) -> None:
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([DynessWorkModeSelect(coordinator, entry)])
+    tou_selects = []
+    for g in range(1, 5):
+        tou_selects += [
+            TouModeSelect(coordinator, entry, g),
+            TouDaysSelect(coordinator, entry, g),
+        ]
+    async_add_entities([DynessWorkModeSelect(coordinator, entry)] + tou_selects)
 
 
 class DynessWorkModeSelect(CoordinatorEntity, SelectEntity):
