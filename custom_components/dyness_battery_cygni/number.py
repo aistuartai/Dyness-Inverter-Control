@@ -6,6 +6,7 @@ from homeassistant.core import HomeAssistant
 
 from . import DOMAIN
 from .tou_entities import TouPowerNumber, TouDodNumber, TouSocMaxNumber
+from .settings_entities import make_battery_entities, make_peak_entities, make_load_entities
 
 
 async def async_setup_entry(
@@ -19,4 +20,10 @@ async def async_setup_entry(
             TouDodNumber(coordinator, entry, g),
             TouSocMaxNumber(coordinator, entry, g),
         ]
+    entities += [
+        e for e in make_battery_entities(coordinator, entry)
+        + make_peak_entities(coordinator, entry)
+        + make_load_entities(coordinator, entry)
+        if hasattr(e, "native_value")  # numbers only
+    ]
     async_add_entities(entities)

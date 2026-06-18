@@ -447,6 +447,13 @@
       "tou_g4_days": { "name": "TOU Group 4 Days" }
     },
     "switch": {
+      "peak_supported":             { "name": "Peak Control Supported" },
+      "peak_enabled":               { "name": "Peak Control Enabled" },
+      "load_supported":             { "name": "Load Control Supported" },
+      "load_switch":                { "name": "Load Switch" },
+      "load_force_off_grid_only":   { "name": "Force Close Off-Grid Only" },
+      "load_always_close_on_grid":  { "name": "Always Close On Grid" },
+      "generator_connected":        { "name": "Generator Connected" },
       "tou_g1_enabled":       { "name": "TOU Group 1 Enabled" },
       "tou_g2_enabled":       { "name": "TOU Group 2 Enabled" },
       "tou_g3_enabled":       { "name": "TOU Group 3 Enabled" },
@@ -461,6 +468,10 @@
       "tou_g4_soc_max_enabled": { "name": "TOU Group 4 Max SOC Limit" }
     },
     "time": {
+      "peak_start":             { "name": "Peak Control Start" },
+      "peak_end":               { "name": "Peak Control End" },
+      "load_force_close_start": { "name": "Force Close Start" },
+      "load_force_close_end":   { "name": "Force Close End" },
       "tou_g1_start": { "name": "TOU Group 1 Start" },
       "tou_g2_start": { "name": "TOU Group 2 Start" },
       "tou_g3_start": { "name": "TOU Group 3 Start" },
@@ -471,6 +482,15 @@
       "tou_g4_end":   { "name": "TOU Group 4 End" }
     },
     "number": {
+      "battery_on_grid_dod":           { "name": "On-Grid Discharge Depth" },
+      "battery_off_grid_dod":          { "name": "Off-Grid Discharge Depth" },
+      "battery_charge_limit":          { "name": "On-Grid Charge Limit" },
+      "battery_off_grid_charge_limit": { "name": "Off-Grid Charge Limit" },
+      "peak_trigger_soc":              { "name": "Peak Control Trigger SOC" },
+      "peak_power":                    { "name": "Peak Control Power Limit" },
+      "load_relay_close_soc":          { "name": "Relay Close SOC" },
+      "load_relay_open_soc":           { "name": "Relay Open SOC" },
+      "load_pv_threshold":             { "name": "PV Power Threshold" },
       "tou_g1_power":   { "name": "TOU Group 1 Power" },
       "tou_g2_power":   { "name": "TOU Group 2 Power" },
       "tou_g3_power":   { "name": "TOU Group 3 Power" },
@@ -485,8 +505,14 @@
       "tou_g4_soc_max": { "name": "TOU Group 4 Max Charge SOC" }
     },
     "button": {
-      "tou_stage_button":   { "name": "Stage TOU Changes" },
-      "tou_confirm_button": { "name": "Confirm & Apply TOU" }
+      "tou_stage_button":     { "name": "Stage TOU Changes" },
+      "tou_confirm_button":   { "name": "Confirm & Apply TOU" },
+      "battery_stage_button": { "name": "Stage Battery Settings" },
+      "battery_confirm_button": { "name": "Confirm & Apply Battery Settings" },
+      "peak_stage_button":    { "name": "Stage Peak Control" },
+      "peak_confirm_button":  { "name": "Confirm & Apply Peak Control" },
+      "load_stage_button":    { "name": "Stage Load Control" },
+      "load_confirm_button":  { "name": "Confirm & Apply Load Control" }
     }
   },
   "config": {

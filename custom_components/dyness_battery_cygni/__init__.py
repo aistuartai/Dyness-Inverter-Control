@@ -443,6 +443,63 @@ class DynessDataCoordinator(DataUpdateCoordinator):
         _LOGGER.info("Dyness SetTOUSchedule: success (device %s)", self.device_sn)
         await self.async_request_refresh()
 
+    async def async_set_battery_setting(self, data: dict) -> None:
+        """Set battery discharge depth and charge limits."""
+        session = async_get_clientsession(self.hass)
+        _LOGGER.info("Dyness SetBatterySetting: %s (device %s)", data, self.device_sn)
+        result = await self._call_v2(session, "/v2/SetBatterySetting", {
+            "deviceSn":                 self.device_sn,
+            "onGridDischargeDod":       str(data["on_grid_dod"]),
+            "offGridDischargeDod":      str(data["off_grid_dod"]),
+            "batteryChargeLimit":       str(data["charge_limit"]),
+            "batteryOffGridChargeLimit": str(data["off_grid_charge_limit"]),
+        })
+        if not _is_success(result):
+            raise HomeAssistantError(
+                f"Dyness SetBatterySetting failed: {result.get('info', result)}"
+            )
+        _LOGGER.info("Dyness SetBatterySetting: success")
+        await self.async_request_refresh()
+
+    async def async_set_peak_control(self, data: dict) -> None:
+        """Set peak control / peak shaving settings."""
+        session = async_get_clientsession(self.hass)
+        _LOGGER.info("Dyness SetPeakControlSetting: %s (device %s)", data, self.device_sn)
+        result = await self._call_v2(session, "/v2/SetPeakControlSetting", {
+            "deviceSn":         self.device_sn,
+            "peakControlEnable": "1" if data["enabled"] else "0",
+            "triggerSoc":       str(data["trigger_soc"]),
+            "timeRange":        f"{data['start_time']}-{data['end_time']}",
+            "peakControlPower": str(data["power"]),
+        })
+        if not _is_success(result):
+            raise HomeAssistantError(
+                f"Dyness SetPeakControlSetting failed: {result.get('info', result)}"
+            )
+        _LOGGER.info("Dyness SetPeakControlSetting: success")
+        await self.async_request_refresh()
+
+    async def async_set_load_control(self, data: dict) -> None:
+        """Set load relay control settings."""
+        session = async_get_clientsession(self.hass)
+        _LOGGER.info("Dyness SetLoadControlSetting: %s (device %s)", data, self.device_sn)
+        result = await self._call_v2(session, "/v2/SetLoadControlSetting", {
+            "deviceSn":              self.device_sn,
+            "loadSwitch":            "1" if data["load_switch"] else "0",
+            "forceCloseTime":        f"{data['force_close_start']}-{data['force_close_end']}",
+            "forceCloseOffGridOnly": "1" if data["force_close_off_grid_only"] else "0",
+            "alwaysCloseOnGridMode": "1" if data["always_close_on_grid"] else "0",
+            "relayCloseSoc":         str(data["relay_close_soc"]),
+            "relayOpenSoc":          str(data["relay_open_soc"]),
+            "pvPowerThreshold":      str(data["pv_power_threshold"]),
+        })
+        if not _is_success(result):
+            raise HomeAssistantError(
+                f"Dyness SetLoadControlSetting failed: {result.get('info', result)}"
+            )
+        _LOGGER.info("Dyness SetLoadControlSetting: success")
+        await self.async_request_refresh()
+
     def _update_scan_interval(self):
         """Passt das Scan-Intervall dynamisch an die Modulanzahl an."""
         n = len(self._module_sns)

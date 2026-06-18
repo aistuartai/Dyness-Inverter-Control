@@ -6,6 +6,7 @@ from homeassistant.core import HomeAssistant
 
 from . import DOMAIN
 from .tou_entities import TouGroupSwitch, TouDodSwitch, TouSocMaxSwitch
+from .settings_entities import make_peak_entities, make_load_entities, make_generator_entities
 
 
 async def async_setup_entry(
@@ -19,4 +20,10 @@ async def async_setup_entry(
             TouDodSwitch(coordinator, entry, g),
             TouSocMaxSwitch(coordinator, entry, g),
         ]
+    entities += [
+        e for e in make_peak_entities(coordinator, entry)
+        + make_load_entities(coordinator, entry)
+        + make_generator_entities(coordinator, entry)
+        if hasattr(e, "is_on")  # switches only
+    ]
     async_add_entities(entities)
