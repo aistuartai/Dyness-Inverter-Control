@@ -8,11 +8,15 @@ from __future__ import annotations
 import logging
 from datetime import time as dt_time
 
+from homeassistant.components.button import ButtonEntity
 from homeassistant.components.number import NumberEntity, NumberMode
+from homeassistant.components.persistent_notification import (
+    async_create as pn_async_create,
+    async_dismiss as pn_async_dismiss,
+)
 from homeassistant.components.select import SelectEntity
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.time import TimeEntity
-from homeassistant.components.button import ButtonEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfPower
 from homeassistant.exceptions import HomeAssistantError
@@ -414,7 +418,8 @@ class TouStageButton(CoordinatorEntity, ButtonEntity):
         self.coordinator._staged_tou = groups
         _LOGGER.info("Dyness TOU: staged %d groups for review", len(groups))
 
-        self.hass.components.persistent_notification.async_create(
+        pn_async_create(
+            self.hass,
             message=_format_tou_summary(groups),
             title="Dyness TOU — Review & Confirm",
             notification_id=_NOTIFICATION_STAGE,
@@ -456,10 +461,9 @@ class TouConfirmButton(CoordinatorEntity, ButtonEntity):
         await self.coordinator.async_set_tou_schedule(staged)
 
         self.coordinator._staged_tou = None
-        self.hass.components.persistent_notification.async_dismiss(
-            notification_id=_NOTIFICATION_STAGE
-        )
-        self.hass.components.persistent_notification.async_create(
+        pn_async_dismiss(self.hass, notification_id=_NOTIFICATION_STAGE)
+        pn_async_create(
+            self.hass,
             message="TOU schedule successfully applied to inverter.",
             title="Dyness TOU — Applied ✓",
             notification_id=_NOTIFICATION_APPLIED,
