@@ -5,7 +5,6 @@ import hmac
 import base64
 import json
 import logging
-import time
 from email.utils import formatdate
 from datetime import timedelta
 
@@ -291,13 +290,13 @@ class DynessDataCoordinator(DataUpdateCoordinator):
 
     async def _call(self, session: aiohttp.ClientSession, path: str, body_dict: dict) -> dict:
         """Rate-limitierter API-Aufruf mit Retry bei HTTP 429."""
-        elapsed = time.monotonic() - self._last_call_time
+        elapsed = asyncio.get_event_loop().time() - self._last_call_time
         if elapsed < _MIN_CALL_INTERVAL:
             await asyncio.sleep(_MIN_CALL_INTERVAL - elapsed)
         url = f"{self.api_base}/openapi/ems-device{path}"
         body = json.dumps(body_dict, separators=(',', ':'))
         for attempt in range(_MAX_RETRIES + 1):
-            self._last_call_time = time.monotonic()
+            self._last_call_time = asyncio.get_event_loop().time()
             headers = _build_headers(self.api_id, self.api_secret, body, path)
             try:
                 async with session.post(url, headers=headers, data=body) as response:
@@ -330,13 +329,13 @@ class DynessDataCoordinator(DataUpdateCoordinator):
 
     async def _call_v2(self, session: aiohttp.ClientSession, path: str, body_dict: dict) -> dict:
         """v2 API call — same base host as v1, same /openapi/ems-device path prefix."""
-        elapsed = time.monotonic() - self._last_call_time
+        elapsed = asyncio.get_event_loop().time() - self._last_call_time
         if elapsed < _MIN_CALL_INTERVAL:
             await asyncio.sleep(_MIN_CALL_INTERVAL - elapsed)
         url = f"{self.api_base}/openapi/ems-device{path}"
         body = json.dumps(body_dict, separators=(',', ':'))
         for attempt in range(_MAX_RETRIES + 1):
-            self._last_call_time = time.monotonic()
+            self._last_call_time = asyncio.get_event_loop().time()
             headers = _build_headers(self.api_id, self.api_secret, body, path)
             try:
                 async with session.post(url, headers=headers, data=body) as response:
