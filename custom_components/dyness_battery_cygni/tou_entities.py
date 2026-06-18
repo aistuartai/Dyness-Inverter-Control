@@ -30,16 +30,16 @@ _LOGGER = logging.getLogger(__name__)
 
 # ── Days presets ──────────────────────────────────────────────────────────────
 DAYS_OPTIONS: dict[str, str] = {
-    "Every Day":    "0,1,2,3,4,5,6",
-    "Weekdays":     "0,1,2,3,4",
-    "Weekends":     "5,6",
-    "Day 0 (Mon?)": "0",
-    "Day 1 (Tue?)": "1",
-    "Day 2 (Wed?)": "2",
-    "Day 3 (Thu?)": "3",
-    "Day 4 (Fri?)": "4",
-    "Day 5 (Sat?)": "5",
-    "Day 6 (Sun?)": "6",
+    "Every Day": "0,1,2,3,4,5,6",
+    "Weekdays":  "0,1,2,3,4",
+    "Weekends":  "5,6",
+    "Monday":    "0",
+    "Tuesday":   "1",
+    "Wednesday": "2",
+    "Thursday":  "3",
+    "Friday":    "4",
+    "Saturday":  "5",
+    "Sunday":    "6",
 }
 
 MODE_OPTIONS: dict[str, str] = {
