@@ -62,13 +62,13 @@ def _select_bms_devices(device_list: list) -> list:
     return bms_devices if bms_devices else device_list
 
 
-SCAN_INTERVAL_OPTIONS = [2, 3, 5, 10, 15]
+SCAN_INTERVAL_OPTIONS = ["2", "3", "5", "10", "15"]
 
 STEP_USER_DATA_SCHEMA = vol.Schema({
     vol.Required("api_id"): str,
     vol.Required("api_secret"): str,
     vol.Required("region", default="europe"): vol.In(["europe", "apac"]),
-    vol.Required(CONF_SCAN_INTERVAL_MINUTES, default=5): vol.In(SCAN_INTERVAL_OPTIONS),
+    vol.Required(CONF_SCAN_INTERVAL_MINUTES, default="5"): vol.In(SCAN_INTERVAL_OPTIONS),
 })
 
 
@@ -83,7 +83,7 @@ class DynessConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._api_base = None
         self._devices = []      # alle gefundenen Geräte
         self._region = "europe"
-        self._scan_interval_minutes = 5
+        self._scan_interval_minutes = "5"
 
     @staticmethod
     def async_get_options_flow(config_entry):
@@ -223,11 +223,11 @@ class DynessOptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
-        current = int(
+        current = str(int(
             self._config_entry.options.get(CONF_SCAN_INTERVAL_MINUTES)
             or self._config_entry.data.get(CONF_SCAN_INTERVAL_MINUTES)
             or 5
-        )
+        ))
 
         schema = vol.Schema({
             vol.Required(CONF_SCAN_INTERVAL_MINUTES, default=current): vol.In(SCAN_INTERVAL_OPTIONS),
