@@ -88,209 +88,47 @@ Enable only if a load relay is connected (toggle the **Feature Supported** switc
 
 ---
 
-## Dashboards
+## Example Dashboards
 
-Both dashboards use the HA `type: sections` layout with a full-width warning header.
+Two ready-to-import dashboards, matching the screenshots above, are included in [`docs/dashboards/`](docs/dashboards/):
 
-### TOU Schedule dashboard
+| Dashboard | File | Shows |
+|---|---|---|
+| TOU Settings | [tou-dashboard.yaml](docs/dashboards/tou-dashboard.yaml) | All 4 TOU groups (Mushroom-styled controls), stage/confirm buttons, system status gauges |
+| Battery Settings | [settings-dashboard.yaml](docs/dashboards/settings-dashboard.yaml) | Battery Limits, and feature-gated Peak Control / Load Control sections that only reveal their settings once **Feature Supported** is switched on |
 
-```yaml
-views:
-  - type: sections
-    title: TOU Schedule
-    sections:
-      - type: grid
-        column_span: 4
-        cards:
-          - type: markdown
-            content: >
-              ## ⚠️ WARNING
+### Required frontend add-ons (HACS)
 
-              **Values shown are NOT read from the inverter.** If this is your
-              first time, the defaults below do not reflect what is currently
-              programmed. Verify every setting before pressing Confirm & Apply.
-              Applying will also switch the inverter to **TOU mode**.
-      - type: grid
-        title: Group 1
-        cards:
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g1_enabled
-          - type: tile
-            entity: time.garage_dyness_cygni_tou_g1_start
-          - type: tile
-            entity: time.garage_dyness_cygni_tou_g1_end
-          - type: tile
-            entity: select.garage_dyness_cygni_tou_g1_mode
-          - type: tile
-            entity: select.garage_dyness_cygni_tou_g1_days
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g1_power
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g1_dod_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g1_dod
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g1_soc_max_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g1_soc_max
-      - type: grid
-        title: Group 2
-        cards:
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g2_enabled
-          - type: tile
-            entity: time.garage_dyness_cygni_tou_g2_start
-          - type: tile
-            entity: time.garage_dyness_cygni_tou_g2_end
-          - type: tile
-            entity: select.garage_dyness_cygni_tou_g2_mode
-          - type: tile
-            entity: select.garage_dyness_cygni_tou_g2_days
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g2_power
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g2_dod_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g2_dod
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g2_soc_max_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g2_soc_max
-      - type: grid
-        title: Group 3
-        cards:
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g3_enabled
-          - type: tile
-            entity: time.garage_dyness_cygni_tou_g3_start
-          - type: tile
-            entity: time.garage_dyness_cygni_tou_g3_end
-          - type: tile
-            entity: select.garage_dyness_cygni_tou_g3_mode
-          - type: tile
-            entity: select.garage_dyness_cygni_tou_g3_days
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g3_power
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g3_dod_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g3_dod
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g3_soc_max_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g3_soc_max
-      - type: grid
-        title: Group 4
-        cards:
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g4_enabled
-          - type: tile
-            entity: time.garage_dyness_cygni_tou_g4_start
-          - type: tile
-            entity: time.garage_dyness_cygni_tou_g4_end
-          - type: tile
-            entity: select.garage_dyness_cygni_tou_g4_mode
-          - type: tile
-            entity: select.garage_dyness_cygni_tou_g4_days
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g4_power
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g4_dod_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g4_dod
-          - type: tile
-            entity: switch.garage_dyness_cygni_tou_g4_soc_max_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_tou_g4_soc_max
-      - type: grid
-        title: Apply Changes
-        cards:
-          - type: tile
-            entity: button.garage_dyness_cygni_stage_preview_tou
-          - type: tile
-            entity: button.garage_dyness_cygni_confirm_apply_tou
-```
+Both dashboards use two custom card types that are **not** built into Home Assistant — install these via HACS → Frontend first, or the cards will show as "custom element doesn't exist":
 
-### Battery Settings dashboard
+| Add-on | HACS repository | Used for |
+|---|---|---|
+| Mushroom | [piitaya/lovelace-mushroom](https://github.com/piitaya/lovelace-mushroom) | Entity/select/number/template cards throughout both dashboards |
+| button-card | [custom-cards/button-card](https://github.com/custom-cards/button-card) | The gradient Stage/Confirm/Enable/Disable action buttons |
 
-```yaml
-views:
-  - type: sections
-    title: Battery Settings
-    sections:
-      - type: grid
-        column_span: 3
-        cards:
-          - type: markdown
-            content: >
-              ## ⚠️ WARNING
+### Importing
 
-              **Values shown are NOT read from the inverter.** Defaults do not
-              reflect current inverter settings. Verify every value before
-              applying. Peak Control and Load Control will error if the
-              **Feature Supported** switch is off.
-      - type: grid
-        title: Battery Limits
-        cards:
-          - type: tile
-            entity: number.garage_dyness_cygni_battery_on_grid_dod
-          - type: tile
-            entity: number.garage_dyness_cygni_battery_off_grid_dod
-          - type: tile
-            entity: number.garage_dyness_cygni_battery_charge_limit
-          - type: tile
-            entity: number.garage_dyness_cygni_battery_off_grid_charge_limit
-          - type: tile
-            entity: button.garage_dyness_cygni_stage_preview_battery
-          - type: tile
-            entity: button.garage_dyness_cygni_confirm_apply_battery
-      - type: grid
-        title: Peak Control
-        cards:
-          - type: tile
-            entity: switch.garage_dyness_cygni_peak_supported
-          - type: tile
-            entity: switch.garage_dyness_cygni_peak_enabled
-          - type: tile
-            entity: number.garage_dyness_cygni_peak_trigger_soc
-          - type: tile
-            entity: time.garage_dyness_cygni_peak_start
-          - type: tile
-            entity: time.garage_dyness_cygni_peak_end
-          - type: tile
-            entity: number.garage_dyness_cygni_peak_power
-          - type: tile
-            entity: button.garage_dyness_cygni_stage_preview_peak
-          - type: tile
-            entity: button.garage_dyness_cygni_confirm_apply_peak
-      - type: grid
-        title: Load Control
-        cards:
-          - type: tile
-            entity: switch.garage_dyness_cygni_load_supported
-          - type: tile
-            entity: switch.garage_dyness_cygni_load_switch
-          - type: tile
-            entity: time.garage_dyness_cygni_load_force_close_start
-          - type: tile
-            entity: time.garage_dyness_cygni_load_force_close_end
-          - type: tile
-            entity: switch.garage_dyness_cygni_load_force_close_off_grid_only
-          - type: tile
-            entity: switch.garage_dyness_cygni_load_always_close_on_grid
-          - type: tile
-            entity: number.garage_dyness_cygni_load_relay_close_soc
-          - type: tile
-            entity: number.garage_dyness_cygni_load_relay_open_soc
-          - type: tile
-            entity: number.garage_dyness_cygni_load_pv_power_threshold
-          - type: tile
-            entity: button.garage_dyness_cygni_stage_preview_load
-          - type: tile
-            entity: button.garage_dyness_cygni_confirm_apply_load
-```
+1. Install the two HACS frontend add-ons above and reload your browser.
+2. In HA: **Settings → Dashboards → + Add Dashboard → New dashboard from scratch**, give it a name, then open it.
+3. Click the pencil (Edit Dashboard) → **⋮ → Raw configuration editor**.
+4. Delete the placeholder content and paste in the contents of the `.yaml` file.
+5. Save. Repeat for the second dashboard if you want both.
 
----
+### Entity ID prefix
+
+Every entity in these dashboards is prefixed with `garage_dyness_cygni_` — `garage` is simply the name I gave my own device when I set it up, and `dyness_cygni` is the integration's domain. Your entities will use whatever name you gave your device instead of `garage`. After pasting the YAML in, use the Raw configuration editor's find-and-replace (or open the file in a text editor first) to swap `garage_dyness_cygni` for your own device's prefix — check **Developer Tools → States** and filter for `dyness_cygni` to find it.
+
+### Optional extras on the TOU dashboard
+
+The TOU dashboard also includes a handful of buttons and sliders that call into **personal automation examples of mine** (a GloBird "ZeroHero" TOU-scheduling setup and a manual battery boost-charge routine) — these are not part of the integration and are not included in this repo. Without matching helpers, the buttons below simply do nothing when pressed (they don't error):
+
+| Entity | Type | Used by |
+|---|---|---|
+| `input_number.tou_import_power` / `tou_export_power` / `tou_boost_power` / `tou_boost_duration` | Helper (Number) | Power/duration sliders on the Enable Import/Export and Boost Charge cards |
+| `input_button.tou_apply_globird_zerohero_optimal` / `tou_export_enable_6_9pm` / `tou_import_disable` / `tou_export_disable` / `tou_disable_all_groups` / `battery_boost_charge_5000w` / `abort_boost_charge` | Helper (Button) | The gradient action buttons in those same sections |
+| `automation.dyness_battery_boost_charge_5000w_1hr` | Automation | "Boost Charge Running" status tile |
+
+Either create matching helpers (**Settings → Devices & Services → Helpers → + Create Helper**) and wire up your own automations behind them, or just delete those specific cards from the Raw configuration editor after importing — the core TOU group controls (Groups 1–4, Stage & Preview, Confirm & Apply) work standalone with no extra setup.
 
 ## Installation (this fork)
 
