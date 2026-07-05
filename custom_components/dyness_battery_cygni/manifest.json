@@ -1,9 +1,9 @@
 {
   "domain": "dyness_battery_cygni",
-  "name": "Dyness Battery - Cygni Control",
-  "version": "2.7.1",
-  "documentation": "https://github.com/shopf/dyness_battery",
-  "issue_tracker": "https://github.com/shopf/dyness_battery/issues",
+  "name": "Dyness Inverter Control",
+  "version": "2.7.2",
+  "documentation": "https://github.com/aistuartai/dyness_battery_stu",
+  "issue_tracker": "https://github.com/aistuartai/dyness_battery_stu/issues",
   "dependencies": [],
   "codeowners": ["@aistuartai"],
   "requirements": ["aiohttp"],

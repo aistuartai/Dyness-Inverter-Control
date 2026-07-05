@@ -1,5 +1,5 @@
 {
-  "name": "Dyness Battery - Cygni Control",
+  "name": "Dyness Inverter Control",
   "content_in_root": false,
   "render_readme": true,
   "homeassistant": "2023.1.0"

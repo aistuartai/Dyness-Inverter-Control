@@ -372,7 +372,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "Dyness Battery - Cygni Control",
+        "title": "Dyness Inverter Control",
         "description": "Enter your Dyness API credentials. Select your region and the device will be discovered automatically.",
         "data": {
           "api_id": "API ID",
@@ -382,7 +382,7 @@
         }
       },
       "manual": {
-        "title": "Dyness Battery - Cygni Control – Manual Setup",
+        "title": "Dyness Inverter Control – Manual Setup",
         "description": "Enter your API credentials, region and device serial numbers.",
         "data": {
           "api_id": "API ID",
@@ -393,7 +393,7 @@
         }
       },
       "select_device": {
-        "title": "Dyness Battery - Cygni Control – Select Device",
+        "title": "Dyness Inverter Control – Select Device",
         "description": "{count} devices found on your account. Please select the battery you want to add. You can add the integration again to set up additional devices.",
         "data": {
           "device_sn": "Device"
@@ -408,7 +408,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Dyness Battery - Polling Options",
+        "title": "Dyness Inverter Control - Polling Options",
         "description": "Set the polling interval. With 1 battery module, 2-3 minutes is safe. With 3+ modules the interval will be raised automatically to avoid API rate limits.",
         "data": {
           "scan_interval_minutes": "Polling Interval (minutes)"

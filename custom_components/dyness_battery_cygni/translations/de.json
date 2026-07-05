@@ -372,7 +372,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "Dyness Battery",
+        "title": "Dyness Inverter Control",
         "description": "Gib deine Dyness API-Zugangsdaten ein. Wähle deine Region — das Gerät wird automatisch erkannt.",
         "data": {
           "api_id": "API ID",
@@ -381,14 +381,14 @@
         }
       },
       "select_device": {
-        "title": "Dyness Battery – Gerät auswählen",
+        "title": "Dyness Inverter Control – Gerät auswählen",
         "description": "{count} Geräte auf deinem Account gefunden. Bitte wähle die Batterie aus, die du hinzufügen möchtest. Du kannst die Integration erneut hinzufügen, um weitere Geräte einzurichten.",
         "data": {
           "device_sn": "Gerät"
         }
       },
       "manual": {
-        "title": "Dyness Battery – Manuelle Einrichtung",
+        "title": "Dyness Inverter Control – Manuelle Einrichtung",
         "description": "Gib deine API-Zugangsdaten, Region und Seriennummern manuell ein.",
         "data": {
           "api_id": "API ID",

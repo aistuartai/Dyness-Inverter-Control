@@ -290,7 +290,7 @@ def TouDodNumber(coordinator, entry, group: int) -> _TouNumber:
     return _TouNumber(
         coordinator, entry, group,
         suffix="dod", ref_key=f"g{group}_dod",
-        min_v=0, max_v=95, step=5,
+        min_v=0, max_v=95, step=1,
         unit="%", icon="mdi:battery-low",
         tk=f"tou_g{group}_dod", default=_DEFAULT_DOD,
     )
@@ -300,7 +300,7 @@ def TouSocMaxNumber(coordinator, entry, group: int) -> _TouNumber:
     return _TouNumber(
         coordinator, entry, group,
         suffix="soc_max", ref_key=f"g{group}_soc_max",
-        min_v=10, max_v=100, step=5,
+        min_v=10, max_v=100, step=1,
         unit="%", icon="mdi:battery-high",
         tk=f"tou_g{group}_soc_max", default=_DEFAULT_SOC_MAX,
     )

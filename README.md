@@ -1,16 +1,16 @@
-# Dyness Battery – Cygni Control (Personal Fork)
+# Dyness Inverter Control
 
-[![Version](https://img.shields.io/badge/version-2.7.1-blue)](https://github.com/aistuartai/dyness_battery_stu/releases)
+[![Version](https://img.shields.io/badge/version-2.7.2-blue)](https://github.com/aistuartai/dyness_battery_stu/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
-> **Personal fork** of [shopf/dyness_battery](https://github.com/shopf/dyness_battery), extended with full inverter control for the **Dyness Cygni 10.0HS-M8** (and Cygni HS series generally).
+> A fork of [shopf/dyness_battery](https://github.com/shopf/dyness_battery), extended with full inverter control for the **Dyness Cygni 10.0HS-M8** (and Cygni HS series generally).
 >
-> Tested on a single setup. Use at your own risk. For a stable, multi-device integration use the upstream repo.
+> ⚠️ Tested on a single setup. Use at your own risk — verify every setting before applying changes to live hardware.
 
 ---
 
-## What this fork adds
+## What this adds
 
 On top of all upstream sensors, this fork adds **write control** via the Dyness v2 API — configuring the inverter directly from Home Assistant without touching the Dyness app.
 
@@ -18,7 +18,7 @@ All settings use a **two-step Stage → Confirm** flow to prevent accidental wri
 
 ### Configurable Polling Interval
 
-Set how often HA polls the Dyness cloud API — configurable at setup and at any time via **Settings → Integrations → Dyness Battery → Configure**.
+Set how often HA polls the Dyness cloud API — configurable at setup and at any time via **Settings → Integrations → Dyness Inverter Control → Configure**.
 
 | Option | Calls/hour (1 module) | Notes |
 |--------|----------------------|-------|
@@ -296,8 +296,8 @@ views:
 
 1. In HACS → **Integrations** → **⋮** → **Custom repositories**
 2. Add: `https://github.com/aistuartai/dyness_battery_stu` — Category: **Integration**
-3. Install **Dyness Battery - Cygni Control**, restart HA
-4. **Settings** → **Devices & Services** → **Add Integration** → search **Dyness Battery - Cygni**
+3. Install **Dyness Inverter Control**, restart HA
+4. **Settings** → **Devices & Services** → **Add Integration** → search **Dyness Inverter Control**
 5. Enter your **API ID** and **API Secret** from [ems.dyness.com](https://ems.dyness.com/login) → Developer Center → API Management
 
 ---
