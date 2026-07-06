@@ -1,6 +1,6 @@
 # Dyness Inverter Control
 
-[![Version](https://img.shields.io/badge/version-2.7.2-blue)](https://github.com/aistuartai/dyness_battery_stu/releases)
+[![Version](https://img.shields.io/badge/version-2.7.2-blue)](https://github.com/aistuartai/Dyness-Inverter-Control/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
@@ -133,7 +133,7 @@ Either create matching helpers (**Settings → Devices & Services → Helpers �
 ## Installation (this fork)
 
 1. In HACS → **Integrations** → **⋮** → **Custom repositories**
-2. Add: `https://github.com/aistuartai/dyness_battery_stu` — Category: **Integration**
+2. Add: `https://github.com/aistuartai/Dyness-Inverter-Control` — Category: **Integration**
 3. Install **Dyness Inverter Control**, restart HA
 4. **Settings** → **Devices & Services** → **Add Integration** → search **Dyness Inverter Control**
 5. Enter your **API ID** and **API Secret** from [ems.dyness.com](https://ems.dyness.com/login) → Developer Center → API Management
