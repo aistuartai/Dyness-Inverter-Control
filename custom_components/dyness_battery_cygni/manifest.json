@@ -1,7 +1,7 @@
 {
   "domain": "dyness_battery_cygni",
   "name": "Dyness Inverter Control",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "documentation": "https://github.com/aistuartai/Dyness-Inverter-Control",
   "issue_tracker": "https://github.com/aistuartai/Dyness-Inverter-Control/issues",
   "dependencies": [],

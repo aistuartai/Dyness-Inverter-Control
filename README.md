@@ -1,6 +1,6 @@
 # Dyness Inverter Control
 
-[![Version](https://img.shields.io/badge/version-2.7.2-blue)](https://github.com/aistuartai/Dyness-Inverter-Control/releases)
+[![Version](https://img.shields.io/badge/version-2.7.3-blue)](https://github.com/aistuartai/Dyness-Inverter-Control/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
