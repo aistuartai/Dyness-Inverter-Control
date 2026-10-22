@@ -12,6 +12,7 @@ branch = true
 [tool.coverage.report]
 show_missing = true
 skip_covered = true
+fail_under = 85
 
 [tool.ruff]
 target-version = "py314"

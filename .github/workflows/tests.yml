@@ -18,5 +18,7 @@ jobs:
       - run: pip install -r requirements_test.txt
       - name: Lint
         run: ruff check custom_components tests
+      - name: Debug snapshot discovery
+        run: ls -la tests tests/snapshots && head -3 tests/snapshots/test_entities.ambr
       - name: Test
         run: pytest --cov --cov-report=term-missing
