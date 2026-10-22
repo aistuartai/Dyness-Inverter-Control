@@ -163,7 +163,7 @@ _TEMP_MAXMIN_SCHEMAS = {
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = entry.runtime_data
     available_data = coordinator.data or {}
     schema = available_data.get("_schema", "unknown")
 

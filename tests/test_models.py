@@ -35,7 +35,7 @@ async def _setup(hass: HomeAssistant, aioclient_mock, device: SyntheticDevice) -
 
 
 def _data(hass: HomeAssistant, entry) -> dict:
-    return hass.data[DOMAIN][entry.entry_id].data
+    return entry.runtime_data.data
 
 
 @pytest.mark.parametrize("model", sorted(MODELS))
@@ -140,7 +140,7 @@ async def test_alarm_notification_raised_then_cleared(hass: HomeAssistant, aiocl
     assert create[0].data["notification_id"] == "dyness_alarm_FAKETWR0001"
 
     device.master_points["5002"] = "0"
-    await hass.data[DOMAIN][entry.entry_id].async_refresh()
+    await entry.runtime_data.async_refresh()
     await hass.async_block_till_done()
     assert _data(hass, entry)["alarmText"] == "OK"
     assert len(dismiss) == 1

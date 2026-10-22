@@ -4,10 +4,9 @@ import logging
 from datetime import timedelta
 
 import aiohttp
-import async_timeout
 
 from homeassistant.core import HomeAssistant, ServiceCall
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
@@ -48,7 +47,11 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Register the integration's actions once, independent of config entries."""
 
     async def _handle_set_tou_schedule(call: ServiceCall) -> None:
-        coordinators = hass.data.get(DOMAIN, {})
+        coordinators = {
+            e.entry_id: e.runtime_data
+            for e in hass.config_entries.async_entries(DOMAIN)
+            if e.state is ConfigEntryState.LOADED
+        }
         entry_id = call.data.get("config_entry_id")
         if entry_id:
             coordinator = coordinators.get(entry_id)
@@ -81,6 +84,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     coordinator = DynessDataCoordinator(
         hass,
+        entry,
         entry.data["api_id"],
         entry.data["api_secret"],
         entry.data["api_base"],
@@ -89,8 +93,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         scan_interval_minutes=scan_interval_minutes,
     )
     await coordinator.async_config_entry_first_refresh()
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = coordinator
+    entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
@@ -136,17 +139,14 @@ async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> Non
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    if unload_ok:
-        hass.data[DOMAIN].pop(entry.entry_id)
-    return unload_ok
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
 class DynessDataCoordinator(DataUpdateCoordinator):
 
-    def __init__(self, hass, api_id, api_secret, api_base,
+    def __init__(self, hass, config_entry, api_id, api_secret, api_base,
                  device_sn=None, dongle_sn=None, scan_interval_minutes=5):
         self._user_scan_interval = scan_interval_minutes
-        super().__init__(hass, _LOGGER, name=DOMAIN,
+        super().__init__(hass, _LOGGER, config_entry=config_entry, name=DOMAIN,
                          update_interval=timedelta(minutes=scan_interval_minutes))
         self.api_id     = api_id
         self.api_secret = api_secret
@@ -231,7 +231,7 @@ class DynessDataCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         try:
-            async with async_timeout.timeout(90):
+            async with asyncio.timeout(90):
 
                 # ── Auto-Discovery BMS SN (einmalig) ─────────────────────
                 if not self.device_sn:

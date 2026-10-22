@@ -4,7 +4,6 @@ from __future__ import annotations
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from . import DOMAIN
 from .tou_entities import TouStageButton, TouConfirmButton
 from .settings_entities import (
     BatteryStageButton, BatteryConfirmButton,
@@ -16,7 +15,7 @@ from .settings_entities import (
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities
 ) -> None:
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = entry.runtime_data
     async_add_entities([
         TouStageButton(coordinator, entry),
         TouConfirmButton(coordinator, entry),

@@ -3,7 +3,8 @@ import asyncio
 
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import DynessApiClient
@@ -63,10 +64,11 @@ class DynessConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._scan_interval_minutes = "5"
 
     @staticmethod
+    @callback
     def async_get_options_flow(config_entry):
-        return DynessOptionsFlowHandler(config_entry)
+        return DynessOptionsFlowHandler()
 
-    async def async_step_user(self, user_input=None) -> FlowResult:
+    async def async_step_user(self, user_input=None) -> ConfigFlowResult:
         """Schritt 1: API-Zugangsdaten + Region."""
         errors = {}
 
@@ -97,7 +99,7 @@ class DynessConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_select_device(self, user_input=None) -> FlowResult:
+    async def async_step_select_device(self, user_input=None) -> ConfigFlowResult:
         """Schritt 2: Gerät auswählen (bei mehreren Geräten auf dem Account)."""
         errors = {}
 
@@ -134,7 +136,7 @@ class DynessConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             },
         )
 
-    async def _create_entry_for_device(self, device: dict) -> FlowResult:
+    async def _create_entry_for_device(self, device: dict) -> ConfigFlowResult:
         """Legt einen Config Entry für ein Gerät an."""
         sn = device.get("deviceSn", "")
         station_name = device.get("stationName") or "Dyness Battery"
@@ -155,7 +157,7 @@ class DynessConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             },
         )
 
-    async def async_step_manual(self, user_input=None) -> FlowResult:
+    async def async_step_manual(self, user_input=None) -> ConfigFlowResult:
         """Fallback: Manuelle SN-Eingabe."""
         errors = {}
 
@@ -193,16 +195,13 @@ class DynessConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 class DynessOptionsFlowHandler(config_entries.OptionsFlow):
     """Options flow — allows changing polling interval after initial setup."""
 
-    def __init__(self, config_entry):
-        self._config_entry = config_entry
-
     async def async_step_init(self, user_input=None):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
         current = str(int(
-            self._config_entry.options.get(CONF_SCAN_INTERVAL_MINUTES)
-            or self._config_entry.data.get(CONF_SCAN_INTERVAL_MINUTES)
+            self.config_entry.options.get(CONF_SCAN_INTERVAL_MINUTES)
+            or self.config_entry.data.get(CONF_SCAN_INTERVAL_MINUTES)
             or 5
         ))
 

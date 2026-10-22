@@ -30,7 +30,7 @@ WORK_MODE_LABELS: dict[str, str] = {v: k for k, v in WORK_MODE_OPTIONS.items()}
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities
 ) -> None:
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = entry.runtime_data
     tou_selects = []
     for g in range(1, 5):
         tou_selects += [

@@ -21,7 +21,7 @@ TOU_PATH = "/v2/SetWorkModeSetting"
 
 
 def _coordinator(hass: HomeAssistant, entry):
-    return hass.data[DOMAIN][entry.entry_id]
+    return entry.runtime_data
 
 
 def _group(**overrides) -> dict:

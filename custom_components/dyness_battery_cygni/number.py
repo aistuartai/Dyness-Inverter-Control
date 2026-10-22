@@ -5,7 +5,6 @@ from homeassistant.components.number import NumberEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from . import DOMAIN
 from .tou_entities import TouPowerNumber, TouDodNumber, TouSocMaxNumber
 from .settings_entities import make_battery_entities, make_peak_entities, make_load_entities
 
@@ -13,7 +12,7 @@ from .settings_entities import make_battery_entities, make_peak_entities, make_l
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities
 ) -> None:
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = entry.runtime_data
     entities = []
     for g in range(1, 5):
         entities += [

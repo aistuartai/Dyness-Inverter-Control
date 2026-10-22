@@ -26,7 +26,6 @@ async def test_setup_and_unload(hass: HomeAssistant, init_integration) -> None:
     assert await hass.config_entries.async_unload(entry.entry_id)
     await hass.async_block_till_done()
     assert entry.state is ConfigEntryState.NOT_LOADED
-    assert entry.entry_id not in hass.data[DOMAIN]
 
 
 async def test_first_refresh_calls_every_read_endpoint(hass: HomeAssistant, init_integration, mock_api) -> None:
@@ -102,7 +101,7 @@ async def test_rate_limit_backs_off_then_succeeds(hass: HomeAssistant, mock_conf
     assert attempts["n"] == 3
     # The patch is global (asyncio is shared), so ignore HA's own sleep(0) yields.
     assert [c.args[0] for c in sleep.await_args_list if c.args[0]] == [10, 20]   # exponential backoff
-    assert hass.data[DOMAIN][mock_config_entry.entry_id].station_info["batteryCapacity"] == "30.72"
+    assert mock_config_entry.runtime_data.station_info["batteryCapacity"] == "30.72"
 
 
 async def test_v2_not_found_disables_v2_polling(hass: HomeAssistant, mock_config_entry, mock_api) -> None:
@@ -116,7 +115,7 @@ async def test_v2_not_found_disables_v2_polling(hass: HomeAssistant, mock_config
     assert await hass.config_entries.async_setup(mock_config_entry.entry_id)
     await hass.async_block_till_done()
 
-    coordinator = hass.data[DOMAIN][mock_config_entry.entry_id]
+    coordinator = mock_config_entry.runtime_data
     assert coordinator._v2_unavailable is True
     assert not calls_to(mock_api, "/v2/GetStatusInfBySN")
 
@@ -126,7 +125,7 @@ async def test_v2_not_found_disables_v2_polling(hass: HomeAssistant, mock_config
 
 
 async def test_v2_endpoints_polled_every_third_cycle(hass: HomeAssistant, init_integration, mock_api) -> None:
-    coordinator = hass.data[DOMAIN][init_integration.entry_id]
+    coordinator = init_integration.runtime_data
     first = len(calls_to(mock_api, "/v2/GetRealTimeDataBySN"))
     for _ in range(3):
         await coordinator.async_refresh()
