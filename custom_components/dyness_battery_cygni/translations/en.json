@@ -430,12 +430,7 @@
     },
     "select": {
       "work_mode_select": {
-        "name": "Work Mode",
-        "state": {
-          "Self-use": "Self-use",
-          "Backup": "Backup",
-          "TOU (Time of Use)": "TOU (Time of Use)"
-        }
+        "name": "Work Mode"
       },
       "tou_g1_mode": { "name": "TOU Group 1 Mode" },
       "tou_g2_mode": { "name": "TOU Group 2 Mode" },

@@ -1,12 +1,14 @@
 {
   "domain": "dyness_battery_cygni",
   "name": "Dyness Inverter Control",
-  "version": "2.7.3",
-  "documentation": "https://github.com/aistuartai/Dyness-Inverter-Control",
-  "issue_tracker": "https://github.com/aistuartai/Dyness-Inverter-Control/issues",
+  "codeowners": [
+    "@aistuartai"
+  ],
+  "config_flow": true,
   "dependencies": [],
-  "codeowners": ["@aistuartai"],
-  "requirements": ["aiohttp"],
+  "documentation": "https://github.com/aistuartai/Dyness-Inverter-Control",
   "iot_class": "cloud_polling",
-  "config_flow": true
+  "issue_tracker": "https://github.com/aistuartai/Dyness-Inverter-Control/issues",
+  "requirements": [],
+  "version": "2.7.3"
 }
