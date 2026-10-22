@@ -6,11 +6,13 @@ from datetime import timedelta
 import aiohttp
 import async_timeout
 
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.typing import ConfigType
 
 from . import payloads
 from .api import DynessApiClient
@@ -39,6 +41,32 @@ from .parsers import ParseInput, build_data, flatten_v2, parse_module_points, re
 
 _LOGGER = logging.getLogger(__name__)
 
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Register the integration's actions once, independent of config entries."""
+
+    async def _handle_set_tou_schedule(call: ServiceCall) -> None:
+        coordinators = hass.data.get(DOMAIN, {})
+        entry_id = call.data.get("config_entry_id")
+        if entry_id:
+            coordinator = coordinators.get(entry_id)
+            if coordinator is None:
+                raise ServiceValidationError(f"No loaded Dyness device for config entry {entry_id}")
+        elif len(coordinators) == 1:
+            coordinator = next(iter(coordinators.values()))
+        elif not coordinators:
+            raise ServiceValidationError("No Dyness device is loaded")
+        else:
+            raise ServiceValidationError(
+                "Several Dyness devices are set up — pass config_entry_id to choose one"
+            )
+        await coordinator.async_set_tou_schedule(call.data.get("groups", []))
+
+    hass.services.async_register(DOMAIN, "set_tou_schedule", _handle_set_tou_schedule)
+    return True
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # ── Veraltete Entitäten aus der Entity-Registry entfernen ────────────────
@@ -66,15 +94,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
-
-    async def _handle_set_tou_schedule(call) -> None:
-        groups = call.data.get("groups", [])
-        await coordinator.async_set_tou_schedule(groups)
-
-    hass.services.async_register(
-        DOMAIN, "set_tou_schedule", _handle_set_tou_schedule
-    )
-
     return True
 
 

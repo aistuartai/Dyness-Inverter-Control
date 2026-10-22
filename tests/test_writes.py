@@ -10,7 +10,8 @@ from unittest.mock import patch
 
 import pytest
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.dyness_battery_cygni import DOMAIN
 
@@ -326,9 +327,41 @@ async def test_set_tou_schedule_service(hass: HomeAssistant, init_integration, m
     assert (group["batteryWorkGroup"], group["power"]) == (4, "8000")
 
 
-@pytest.mark.xfail(strict=True, reason="2.8.0 fix list: service passes times through unvalidated")
-async def test_set_tou_schedule_service_rejects_non_hhmm_time(hass: HomeAssistant, init_integration, mock_api) -> None:
-    with pytest.raises(HomeAssistantError):
+@pytest.mark.parametrize("bad", ["22:00:00", "7:00", "24:00", "12:60", ""])
+async def test_set_tou_schedule_service_rejects_non_hhmm_time(
+    hass: HomeAssistant, init_integration, mock_api, bad: str
+) -> None:
+    with pytest.raises(HomeAssistantError, match="must be HH:mm"):
         await hass.services.async_call(
-            DOMAIN, "set_tou_schedule", {"groups": [_group(start_time="22:00:00")]}, blocking=True
+            DOMAIN, "set_tou_schedule", {"groups": [_group(start_time=bad)]}, blocking=True
         )
+    assert not calls_to(mock_api, TOU_PATH)
+
+
+async def test_service_registered_without_entries(hass: HomeAssistant) -> None:
+    from homeassistant.setup import async_setup_component
+
+    assert await async_setup_component(hass, DOMAIN, {})
+    assert hass.services.has_service(DOMAIN, "set_tou_schedule")
+    with pytest.raises(ServiceValidationError, match="No Dyness device is loaded"):
+        await hass.services.async_call(DOMAIN, "set_tou_schedule", {"groups": [_group()]}, blocking=True)
+
+
+async def test_service_picks_device_by_config_entry(hass: HomeAssistant, init_integration, mock_api) -> None:
+    second = MockConfigEntry(domain=DOMAIN, title="Shed", unique_id="test_api_id_FAKESN000000000000002",
+                             data={**init_integration.data, "device_sn": "FAKESN000000000000002"})
+    second.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(second.entry_id)
+    await hass.async_block_till_done()
+
+    with pytest.raises(ServiceValidationError, match="pass config_entry_id"):
+        await hass.services.async_call(DOMAIN, "set_tou_schedule", {"groups": [_group()]}, blocking=True)
+    with pytest.raises(ServiceValidationError, match="No loaded Dyness device"):
+        await hass.services.async_call(
+            DOMAIN, "set_tou_schedule", {"config_entry_id": "nope", "groups": [_group()]}, blocking=True
+        )
+
+    await hass.services.async_call(
+        DOMAIN, "set_tou_schedule", {"config_entry_id": second.entry_id, "groups": [_group()]}, blocking=True
+    )
+    assert calls_to(mock_api, TOU_PATH)[-1]["deviceSn"] == "FAKESN000000000000002"

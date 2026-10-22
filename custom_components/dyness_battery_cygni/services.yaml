@@ -5,6 +5,14 @@ set_tou_schedule:
     Automatically switches the inverter to TOU mode (work mode 3).
     All active groups must be included — unused groups should have enabled: false.
   fields:
+    config_entry_id:
+      name: Device
+      description: >
+        Which Dyness device to send the schedule to. Only needed when more than one is set up.
+      required: false
+      selector:
+        config_entry:
+          integration: dyness_battery_cygni
     groups:
       name: Groups
       description: >

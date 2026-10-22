@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from collections import Counter
 
-import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 from syrupy.assertion import SnapshotAssertion

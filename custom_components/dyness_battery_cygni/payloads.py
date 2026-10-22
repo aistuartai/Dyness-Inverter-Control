@@ -6,7 +6,11 @@ follow the same convention but are not yet verified on hardware.
 """
 from __future__ import annotations
 
+import re
+
 from homeassistant.exceptions import HomeAssistantError
+
+_HHMM = re.compile(r"^([01]\d|2[0-3]):[0-5]\d$")   # spec p30: HH:mm, nothing else
 
 WORK_MODES = {"0", "2", "3"}   # Self-use, Backup, TOU. Off-grid (1) must be set on the inverter.
 
@@ -40,6 +44,9 @@ def tou_schedule(device_sn: str | None, groups: list) -> dict:
         dod = int(g.get("dod", 20))
         if not 0 <= dod <= 95:
             raise HomeAssistantError(f"dod must be 0-95%, got {dod}")
+        for key in ("start_time", "end_time"):
+            if not _HHMM.match(str(g[key])):
+                raise HomeAssistantError(f"{key} must be HH:mm, got {g[key]!r}")
         soc_max = int(g.get("soc_max", 100))
         if not 10 <= soc_max <= 100:
             raise HomeAssistantError(f"soc_max must be 10-100%, got {soc_max}")
