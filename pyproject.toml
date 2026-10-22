@@ -22,7 +22,3 @@ line-length = 120
 # Correctness-focused set; style rules are left off to avoid churning existing code.
 select = ["E9", "F", "B", "ASYNC", "PLE"]
 ignore = ["B904"]
-
-[tool.ruff.lint.per-file-ignores]
-# TEMPORARY: two dead locals in the 1100-line update method; removed in the 2.8.0 parsers.py refactor.
-"custom_components/dyness_battery_cygni/__init__.py" = ["F841"]

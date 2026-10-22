@@ -34,7 +34,7 @@ async def test_single_device_creates_entry(hass: HomeAssistant) -> None:
     with patch(FETCH, return_value=[DEVICE]) as fetch, patch(SETUP, return_value=True):
         result = await hass.config_entries.flow.async_configure(result["flow_id"], USER_INPUT)
 
-    fetch.assert_called_once_with(API_ID, API_SECRET, "https://apacopen-api.dyness.com")
+    fetch.assert_called_once_with(hass, API_ID, API_SECRET, "https://apacopen-api.dyness.com")
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["title"] == "Test Station"
     assert result["data"] == {
@@ -48,7 +48,7 @@ async def test_europe_region_uses_europe_host(hass: HomeAssistant) -> None:
     result = await _start(hass)
     with patch(FETCH, return_value=[DEVICE]) as fetch, patch(SETUP, return_value=True):
         await hass.config_entries.flow.async_configure(result["flow_id"], {**USER_INPUT, "region": "europe"})
-    assert fetch.call_args.args[2] == "https://open-api.dyness.com"
+    assert fetch.call_args.args[3] == "https://open-api.dyness.com"
 
 
 async def test_no_devices_shows_error(hass: HomeAssistant) -> None:

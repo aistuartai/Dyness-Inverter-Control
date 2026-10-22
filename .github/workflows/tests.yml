@@ -28,5 +28,20 @@ jobs:
           print(p.resolve(), p.stat().st_size)
           print([s.name for s in AmberDataSerializer.read_file(p)])
           EOF
+          cat > /tmp/dbgsnap.py <<'EOF'
+          import syrupy.extensions.base as base
+          _orig = base.SnapshotCollectionStorage.read_snapshot
+          def read_snapshot(self, *, test_location, index, session_id):
+              loc = self.get_location(test_location=test_location, index=index)
+              name = self.get_snapshot_name(test_location=test_location, index=index)
+              print(f"\nDBG location={loc} name={name} filepath={test_location.filepath}", flush=True)
+              try:
+                  return _orig(self, test_location=test_location, index=index, session_id=session_id)
+              except Exception as e:
+                  print(f"DBG read failed: {type(e).__name__}: {e}", flush=True)
+                  raise
+          base.SnapshotCollectionStorage.read_snapshot = read_snapshot
+          EOF
+          PYTHONPATH=/tmp python -m pytest -p dbgsnap -s -q -p no:logging tests/test_entities.py::test_state_snapshot 2>&1 | grep -E "DBG|passed|failed" || true
       - name: Test
         run: pytest --cov --cov-report=term-missing

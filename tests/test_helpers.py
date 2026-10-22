@@ -9,7 +9,11 @@ from unittest.mock import patch
 
 import pytest
 
-from custom_components.dyness_battery_cygni import (
+from custom_components.dyness_battery_cygni.api import build_headers as _build_headers
+from custom_components.dyness_battery_cygni.api import get_md5 as _get_md5
+from custom_components.dyness_battery_cygni.api import get_signature as _get_signature
+from custom_components.dyness_battery_cygni.config_flow import _select_bms_devices
+from custom_components.dyness_battery_cygni.const import (
     SCHEMA_CYGNI,
     SCHEMA_DL5,
     SCHEMA_JUNIOR,
@@ -19,15 +23,11 @@ from custom_components.dyness_battery_cygni import (
     SCHEMA_STACK100,
     SCHEMA_TOWER,
     SCHEMA_UNKNOWN,
-    _build_headers,
     _detect_schema,
-    _get_md5,
-    _get_signature,
     _is_success,
     _scan_interval_for_modules,
     _to_float,
 )
-from custom_components.dyness_battery_cygni.config_flow import _build_headers_cf, _select_bms_devices
 
 DATE = "Thu, 22 Oct 2026 08:00:00 GMT"
 
@@ -51,17 +51,11 @@ def test_signature_matches_spec_string_to_sign() -> None:
 def test_headers_sign_application_json_but_send_charset() -> None:
     # The signed content type is "application/json"; the header carries ";charset=UTF-8".
     # Same as the spec's Java example — the server accepts it.
-    with patch("custom_components.dyness_battery_cygni._get_gmt_time", return_value=DATE):
+    with patch("custom_components.dyness_battery_cygni.api.get_gmt_time", return_value=DATE):
         headers = _build_headers("id", "secret", "{}", "/v1/x")
     assert headers["Content-Type"] == "application/json;charset=UTF-8"
     assert headers["Date"] == DATE
     assert headers["Authorization"] == f"API id:{_get_signature('secret', _get_md5('{}'), DATE, '/v1/x')}"
-
-
-def test_config_flow_signs_identically_to_coordinator() -> None:
-    with patch("custom_components.dyness_battery_cygni._get_gmt_time", return_value=DATE), \
-         patch("custom_components.dyness_battery_cygni.config_flow.formatdate", return_value=DATE):
-        assert _build_headers_cf("id", "secret", "{}", "/v1/x") == _build_headers("id", "secret", "{}", "/v1/x")
 
 
 # ── Response helpers ─────────────────────────────────────────────────────────

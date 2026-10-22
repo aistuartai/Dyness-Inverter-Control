@@ -75,7 +75,7 @@ def auto_enable_custom_integrations(enable_custom_integrations):
 @pytest.fixture(autouse=True)
 def no_call_spacing():
     """The coordinator spaces API calls 1.5 s apart; tests don't need to wait."""
-    with patch("custom_components.dyness_battery_cygni._MIN_CALL_INTERVAL", 0):
+    with patch("custom_components.dyness_battery_cygni.api.MIN_CALL_INTERVAL", 0):
         yield
 
 

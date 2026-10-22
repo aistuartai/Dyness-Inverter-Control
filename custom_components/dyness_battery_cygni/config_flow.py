@@ -1,14 +1,13 @@
 """Config Flow für Dyness Battery Integration."""
+import asyncio
+
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from . import DOMAIN, CONF_SCAN_INTERVAL_MINUTES, _BMS_SUFFIXES, _is_success
-import hashlib
-import hmac
-import base64
-import aiohttp
-from email.utils import formatdate
+from .api import DynessApiClient
+from .const import DOMAIN, CONF_SCAN_INTERVAL_MINUTES, _BMS_SUFFIXES, _is_success
 
 # API Domains je Region
 API_REGIONS = {
@@ -17,36 +16,14 @@ API_REGIONS = {
 }
 
 
-def _build_headers_cf(api_id, api_secret, body, path):
-    date = formatdate(timeval=None, localtime=False, usegmt=True)
-    md5 = base64.b64encode(hashlib.md5(body.encode()).digest()).decode()
-    sts = f"POST\n{md5}\napplication/json\n{date}\n{path}"
-    sig = base64.b64encode(
-        hmac.new(api_secret.encode(), sts.encode(), "sha1").digest()
-    ).decode()
-    return {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Content-MD5": md5,
-        "Date": date,
-        "Authorization": f"API {api_id}:{sig}",
-    }
-
-
-async def _fetch_device_list(api_id: str, api_secret: str, api_base: str) -> list:
+async def _fetch_device_list(hass, api_id: str, api_secret: str, api_base: str) -> list:
     """Gibt alle Geräte auf dem Account zurück."""
-    path = "/v1/device/storage/list"
-    url = f"{api_base}/openapi/ems-device{path}"
-    body = "{}"
-    headers = _build_headers_cf(api_id, api_secret, body, path)
+    client = DynessApiClient(async_get_clientsession(hass), api_id, api_secret, api_base)
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                url, headers=headers, data=body,
-                timeout=aiohttp.ClientTimeout(total=10)
-            ) as resp:
-                result = await resp.json(content_type=None)
-                if _is_success(result):
-                    return (result.get("data", {}) or {}).get("list", [])
+        async with asyncio.timeout(10):
+            result = await client.call("/v1/device/storage/list", {})
+        if _is_success(result):
+            return (result.get("data", {}) or {}).get("list", [])
     except Exception:
         pass
     return []
@@ -101,7 +78,7 @@ class DynessConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self._scan_interval_minutes = user_input.get(CONF_SCAN_INTERVAL_MINUTES, 5)
 
             device_list = await _fetch_device_list(
-                self._api_id, self._api_secret, self._api_base
+                self.hass, self._api_id, self._api_secret, self._api_base
             )
             self._devices = _select_bms_devices(device_list)
 
