@@ -18,5 +18,3 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
-          # Issues are disabled on the repo; topics/brands checks are not release blockers.
-          ignore: brands issues topics
