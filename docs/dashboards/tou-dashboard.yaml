@@ -905,7 +905,7 @@ views:
         icon: mdi:cog-sync
       - type: tile
         entity: sensor.garage_dyness_cygni_power_limit_active
-        name: Power Limit
+        name: Export Limit
         icon: mdi:speedometer
     - type: heading
       heading: System Status
