@@ -105,7 +105,7 @@ class _SettingsNumber(_SettingsBase, NumberEntity):
 
     def __init__(
         self, coordinator, entry, uid_suffix, ref_key,
-        min_v, max_v, step, unit, icon, tk, default
+        min_v, max_v, step, unit, icon, tk, default, readback_key: str | None = None
     ) -> None:
         super().__init__(coordinator, entry, uid_suffix, ref_key)
         self._attr_translation_key = tk
@@ -115,10 +115,27 @@ class _SettingsNumber(_SettingsBase, NumberEntity):
         self._attr_native_unit_of_measurement = unit
         self._attr_icon = icon
         self._value: float = float(default)
+        # Coordinator data key holding what the inverter actually reports for this setting.
+        self._readback_key = readback_key
 
     @property
     def native_value(self) -> float:
         return self._value
+
+    @property
+    def inverter_value(self) -> float | None:
+        """The value the inverter reports, or None when the API has no read-back for it."""
+        if self._readback_key is None:
+            return None
+        value = (self.coordinator.data or {}).get(self._readback_key)
+        return None if value is None else float(value)
+
+    @property
+    def extra_state_attributes(self) -> dict | None:
+        inverter_value = self.inverter_value
+        if inverter_value is None:
+            return None
+        return {"inverter_value": inverter_value, "in_sync": inverter_value == self._value}
 
     async def async_set_native_value(self, value: float) -> None:
         self._value = value
@@ -174,14 +191,14 @@ def make_battery_entities(coordinator, entry):
             uid_suffix="battery_on_grid_dod", ref_key="battery_on_grid_dod",
             min_v=0, max_v=95, step=5, unit="%",
             icon="mdi:battery-arrow-down-outline",
-            tk="battery_on_grid_dod", default=20,
+            tk="battery_on_grid_dod", default=20, readback_key="onGridDischargeDepth",
         ),
         _SettingsNumber(
             coordinator, entry,
             uid_suffix="battery_off_grid_dod", ref_key="battery_off_grid_dod",
             min_v=0, max_v=95, step=5, unit="%",
             icon="mdi:battery-arrow-down-outline",
-            tk="battery_off_grid_dod", default=20,
+            tk="battery_off_grid_dod", default=20, readback_key="offGridDischargeDepth",
         ),
         _SettingsNumber(
             coordinator, entry,
@@ -321,16 +338,33 @@ def make_generator_entities(coordinator, entry):
 
 # ── Notification formatters ───────────────────────────────────────────────────
 
+def _with_inverter_value(entity) -> str:
+    """``80%``, or ``80% (inverter currently 85%)`` when the inverter reports something else."""
+    text = f"{int(entity.native_value)}%"
+    inverter_value = entity.inverter_value
+    if inverter_value is not None and inverter_value != entity.native_value:
+        text += f" (inverter currently {inverter_value:g}%)"
+    return text
+
+
 def _fmt_battery(refs) -> str:
+    dods = (refs["battery_on_grid_dod"], refs["battery_off_grid_dod"])
+    drift = any(e.inverter_value is not None and e.inverter_value != e.native_value for e in dods)
     lines = [
         "**Proposed Battery Settings**", "",
-        f"  • On-Grid Discharge Depth: {int(refs['battery_on_grid_dod'].native_value)}%",
-        f"  • Off-Grid Discharge Depth: {int(refs['battery_off_grid_dod'].native_value)}%",
+        f"  • On-Grid Discharge Depth: {_with_inverter_value(dods[0])}",
+        f"  • Off-Grid Discharge Depth: {_with_inverter_value(dods[1])}",
         f"  • On-Grid Charge Limit: {int(refs['battery_charge_limit'].native_value)}%",
         f"  • Off-Grid Charge Limit: {int(refs['battery_off_grid_charge_limit'].native_value)}%",
         "",
-        "Press **Confirm & Apply Battery Settings** to send to inverter.",
     ]
+    if drift:
+        lines += [
+            "⚠️ Some values in Home Assistant differ from what the inverter reports — "
+            "they were probably changed in the Dyness app. Confirming sends the values above.",
+            "",
+        ]
+    lines.append("Press **Confirm & Apply Battery Settings** to send to inverter.")
     return "\n".join(lines)
 
 
