@@ -19,6 +19,14 @@ jobs:
       - name: Lint
         run: ruff check custom_components tests
       - name: Debug snapshot discovery
-        run: ls -la tests tests/snapshots && head -3 tests/snapshots/test_entities.ambr
+        run: |
+          locale; python -c "import sys,locale;print(sys.version, sys.flags.utf8_mode, locale.getpreferredencoding())"
+          python - <<'EOF'
+          from pathlib import Path
+          from syrupy.extensions.amber.serializer import AmberDataSerializer
+          p = Path("tests/snapshots/test_entities.ambr")
+          print(p.resolve(), p.stat().st_size)
+          print([s.name for s in AmberDataSerializer.read_file(p)])
+          EOF
       - name: Test
         run: pytest --cov --cov-report=term-missing

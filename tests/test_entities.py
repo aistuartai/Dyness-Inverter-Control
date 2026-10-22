@@ -51,6 +51,13 @@ async def test_state_snapshot(hass: HomeAssistant, init_integration, snapshot: S
     assert states == snapshot
 
 
+async def test_coordinator_data_snapshot(hass: HomeAssistant, init_integration, snapshot: SnapshotAssertion) -> None:
+    """The full parsed dict for the real capture, including keys no entity exposes."""
+    from custom_components.dyness_battery_cygni import DOMAIN
+
+    assert hass.data[DOMAIN][init_integration.entry_id].data == snapshot
+
+
 @pytest.mark.xfail(strict=True, reason="2.8.0 fix list: number.py/time.py add the same object to both platforms")
 async def test_each_setting_lives_on_exactly_one_platform(hass: HomeAssistant, init_integration) -> None:
     per_uid = Counter(e.unique_id for e in _registry(hass, init_integration))

@@ -52,6 +52,15 @@ async def test_model_state_snapshot(
     assert states == snapshot
 
 
+@pytest.mark.parametrize("model", sorted(MODELS))
+async def test_model_coordinator_data_snapshot(
+    hass: HomeAssistant, aioclient_mock, snapshot: SnapshotAssertion, model: str
+) -> None:
+    """The full parsed dict, including keys no entity exposes — guards the parser refactor."""
+    entry = await _setup(hass, aioclient_mock, MODELS[model]())
+    assert _data(hass, entry) == snapshot
+
+
 @pytest.mark.parametrize(("model", "schema"), [
     ("tower_t14", "tower"), ("tower_pro_tp7", "tower"), ("stack100", "stack100"), ("dl5", "dl5"),
     ("junior_box", "junior"), ("powerbox_pro", "powerbox_pro"), ("powerbox_g2", "powerbox_g2"),
