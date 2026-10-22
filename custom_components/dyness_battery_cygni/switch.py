@@ -1,6 +1,7 @@
 """Switch platform for Dyness Battery - Cygni Control (TOU settings)."""
 from __future__ import annotations
 
+from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -24,6 +25,6 @@ async def async_setup_entry(
         e for e in make_peak_entities(coordinator, entry)
         + make_load_entities(coordinator, entry)
         + make_generator_entities(coordinator, entry)
-        if hasattr(e, "is_on")  # switches only
+        if isinstance(e, SwitchEntity)
     ]
     async_add_entities(entities)

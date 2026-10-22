@@ -298,7 +298,6 @@ async def test_load_stage_blocked_while_not_supported(hass: HomeAssistant, init_
         await _press(hass, init_integration, "load_stage_button")
 
 
-@pytest.mark.xfail(strict=True, reason="2.8.0 fix list: number/time platform mix-up — setting is silently ignored")
 async def test_peak_power_number_reaches_payload(hass: HomeAssistant, init_integration, mock_api) -> None:
     """Changing Peak Control Power in the UI must change what Confirm sends."""
     entry = init_integration
@@ -311,7 +310,6 @@ async def test_peak_power_number_reaches_payload(hass: HomeAssistant, init_integ
     assert calls_to(mock_api, "/v2/SetPeakControlSetting")[-1]["peakControlPower"] == "3000"
 
 
-@pytest.mark.xfail(strict=True, reason="2.8.0 fix list: number/time platform mix-up — setting is silently ignored")
 async def test_load_stage_rejects_open_soc_not_below_close(hass: HomeAssistant, init_integration) -> None:
     entry = init_integration
     await _call(hass, "switch", "turn_on", entity_id(hass, entry, "switch", "load_supported"))

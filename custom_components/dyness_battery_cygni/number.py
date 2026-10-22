@@ -1,6 +1,7 @@
 """Number platform for Dyness Battery - Cygni Control (TOU settings)."""
 from __future__ import annotations
 
+from homeassistant.components.number import NumberEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -24,6 +25,6 @@ async def async_setup_entry(
         e for e in make_battery_entities(coordinator, entry)
         + make_peak_entities(coordinator, entry)
         + make_load_entities(coordinator, entry)
-        if hasattr(e, "native_value")  # numbers only
+        if isinstance(e, NumberEntity)
     ]
     async_add_entities(entities)

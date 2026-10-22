@@ -139,34 +139,6 @@
     dict({
       'category': <EntityCategory.CONFIG: 'config'>,
       'disabled_by': None,
-      'entity_id': 'number.test_station',
-      'translation_key': 'peak_start',
-      'unique_id': 'peak_start',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
-      'entity_id': 'number.test_station_2',
-      'translation_key': 'peak_end',
-      'unique_id': 'peak_end',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
-      'entity_id': 'number.test_station_3',
-      'translation_key': 'load_force_close_start',
-      'unique_id': 'load_force_close_start',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
-      'entity_id': 'number.test_station_4',
-      'translation_key': 'load_force_close_end',
-      'unique_id': 'load_force_close_end',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
       'entity_id': 'number.test_station_off_grid_charge_limit',
       'translation_key': 'battery_off_grid_charge_limit',
       'unique_id': 'battery_off_grid_charge_limit',
@@ -965,41 +937,6 @@
     dict({
       'category': <EntityCategory.CONFIG: 'config'>,
       'disabled_by': None,
-      'entity_id': 'time.test_station',
-      'translation_key': 'peak_trigger_soc',
-      'unique_id': 'peak_trigger_soc',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
-      'entity_id': 'time.test_station_2',
-      'translation_key': 'peak_power',
-      'unique_id': 'peak_power',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
-      'entity_id': 'time.test_station_3',
-      'translation_key': 'load_relay_close_soc',
-      'unique_id': 'load_relay_close_soc',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
-      'entity_id': 'time.test_station_4',
-      'translation_key': 'load_relay_open_soc',
-      'unique_id': 'load_relay_open_soc',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
-      'entity_id': 'time.test_station_5',
-      'translation_key': 'load_pv_threshold',
-      'unique_id': 'load_pv_threshold',
-    }),
-    dict({
-      'category': <EntityCategory.CONFIG: 'config'>,
-      'disabled_by': None,
       'entity_id': 'time.test_station_force_close_end',
       'translation_key': 'load_force_close_end',
       'unique_id': 'load_force_close_end',
@@ -1115,22 +1052,6 @@
     ),
     'button.test_station_stage_tou_changes': tuple(
       'unknown',
-      None,
-    ),
-    'number.test_station': tuple(
-      '16:00:00',
-      None,
-    ),
-    'number.test_station_2': tuple(
-      '21:00:00',
-      None,
-    ),
-    'number.test_station_3': tuple(
-      '22:00:00',
-      None,
-    ),
-    'number.test_station_4': tuple(
-      '06:00:00',
       None,
     ),
     'number.test_station_off_grid_charge_limit': tuple(
@@ -1588,26 +1509,6 @@
     'switch.test_station_tou_group_4_max_soc_limit': tuple(
       'on',
       None,
-    ),
-    'time.test_station': tuple(
-      '50.0',
-      '%',
-    ),
-    'time.test_station_2': tuple(
-      '1000.0',
-      <UnitOfPower.WATT: 'W'>,
-    ),
-    'time.test_station_3': tuple(
-      '80.0',
-      '%',
-    ),
-    'time.test_station_4': tuple(
-      '20.0',
-      '%',
-    ),
-    'time.test_station_5': tuple(
-      '500.0',
-      <UnitOfPower.WATT: 'W'>,
     ),
     'time.test_station_force_close_end': tuple(
       '06:00:00',

@@ -58,10 +58,31 @@ async def test_coordinator_data_snapshot(hass: HomeAssistant, init_integration, 
     assert hass.data[DOMAIN][init_integration.entry_id].data == snapshot
 
 
-@pytest.mark.xfail(strict=True, reason="2.8.0 fix list: number.py/time.py add the same object to both platforms")
 async def test_each_setting_lives_on_exactly_one_platform(hass: HomeAssistant, init_integration) -> None:
     per_uid = Counter(e.unique_id for e in _registry(hass, init_integration))
     assert [uid for uid, n in per_uid.items() if n > 1] == []
+
+
+async def test_misplatformed_duplicates_removed_on_upgrade(hass: HomeAssistant, mock_config_entry, mock_api) -> None:
+    """Installs before 2.8.0 have number.* entries for peak/load times and time.* entries for
+    the settings numbers; setup must delete them and keep the correct ones."""
+    from custom_components.dyness_battery_cygni.const import DOMAIN, MISPLATFORMED_ENTITY_KEYS
+
+    mock_config_entry.add_to_hass(hass)
+    reg = er.async_get(hass)
+    junk = [
+        reg.async_get_or_create(domain, DOMAIN, f"{mock_config_entry.entry_id}_{key}",
+                                config_entry=mock_config_entry).entity_id
+        for domain, keys in MISPLATFORMED_ENTITY_KEYS.items() for key in sorted(keys)
+    ]
+    assert len(junk) == 9
+
+    assert await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert all(reg.async_get(eid) is None for eid in junk)
+    assert entity_id(hass, mock_config_entry, "time", "peak_start").startswith("time.")
+    assert entity_id(hass, mock_config_entry, "number", "peak_power").startswith("number.")
 
 
 # ── Golden values (hardware-confirmed meanings) ──────────────────────────────

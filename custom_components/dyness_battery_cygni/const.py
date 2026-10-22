@@ -21,6 +21,14 @@ PLATFORMS = [
 
 # Entitäten die in früheren Versionen existierten aber entfernt wurden.
 # Diese werden beim Setup automatisch aus der Entity-Registry gelöscht.
+# Settings entities that versions before 2.8.0 also registered on the wrong platform
+# (number.py / time.py filtered by attribute, so each let the other's types through).
+# Those duplicates are removed from the entity registry on setup.
+MISPLATFORMED_ENTITY_KEYS = {
+    "number": {"peak_start", "peak_end", "load_force_close_start", "load_force_close_end"},
+    "time": {"peak_trigger_soc", "peak_power", "load_relay_close_soc", "load_relay_open_soc", "load_pv_threshold"},
+}
+
 STALE_ENTITY_KEYS = {
     # v2.0.0: alarmStatus1 / alarmStatus2 ersetzt durch alarmText + Alarm-Bit-Sensoren
     "alarmStatus1",

@@ -18,6 +18,7 @@ from .const import (  # noqa: F401 — re-exported for the platform modules
     _BMS_SUFFIXES,
     CONF_SCAN_INTERVAL_MINUTES,
     DOMAIN,
+    MISPLATFORMED_ENTITY_KEYS,
     PLATFORMS,
     SCHEMA_CYGNI,
     SCHEMA_DL5,
@@ -95,6 +96,8 @@ async def _async_cleanup_stale_entities(hass: HomeAssistant, entry: ConfigEntry)
             or entity.unique_id.endswith(f"_{key}")                 # Modul-Level (entry_id_mid_key)
             for key in STALE_ENTITY_KEYS
         )
+        or entity.unique_id.removeprefix(f"{entry.entry_id}_")
+        in MISPLATFORMED_ENTITY_KEYS.get(entity.domain, set())
     ]
     if stale_entities:
         _LOGGER.info(

@@ -1,6 +1,7 @@
 """Time platform for Dyness Battery - Cygni Control (TOU settings)."""
 from __future__ import annotations
 
+from homeassistant.components.time import TimeEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -22,6 +23,6 @@ async def async_setup_entry(
     entities += [
         e for e in make_peak_entities(coordinator, entry)
         + make_load_entities(coordinator, entry)
-        if hasattr(e, "native_value") and hasattr(e, "async_set_value")  # time entities
+        if isinstance(e, TimeEntity)
     ]
     async_add_entities(entities)
