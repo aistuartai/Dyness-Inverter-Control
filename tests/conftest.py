@@ -14,7 +14,9 @@ import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+from syrupy.assertion import SnapshotAssertion
 
 from custom_components.dyness_battery_cygni import CONF_SCAN_INTERVAL_MINUTES, DOMAIN
 
@@ -70,6 +72,17 @@ def entity_id(hass: HomeAssistant, entry: MockConfigEntry, domain: str, suffix: 
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations):
     yield
+
+
+@pytest.fixture
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
+    """Pin HA's snapshot extension (files in tests/snapshots/).
+
+    Both syrupy and pytest-homeassistant-custom-component define ``snapshot``; which
+    plugin wins depends on install order (it differed between uv locally and pip on
+    GitHub), so the conftest makes the choice explicit.
+    """
+    return snapshot.use_extension(HomeAssistantSnapshotExtension)
 
 
 @pytest.fixture(autouse=True)
