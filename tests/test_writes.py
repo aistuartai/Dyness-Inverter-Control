@@ -302,12 +302,12 @@ async def test_peak_power_number_reaches_payload(hass: HomeAssistant, init_integ
     """Changing Peak Control Power in the UI must change what Confirm sends."""
     entry = init_integration
     await _call(hass, "switch", "turn_on", entity_id(hass, entry, "switch", "peak_supported"))
-    await _call(hass, "number", "set_value", entity_id(hass, entry, "number", "peak_power"), value=3000)
+    await _call(hass, "number", "set_value", entity_id(hass, entry, "number", "peak_power"), value=30)
     with patch("custom_components.dyness_battery_cygni.settings_entities.pn_async_create"), \
          patch("custom_components.dyness_battery_cygni.settings_entities.pn_async_dismiss"):
         await _press(hass, entry, "peak_stage_button")
         await _press(hass, entry, "peak_confirm_button")
-    assert calls_to(mock_api, "/v2/SetPeakControlSetting")[-1]["peakControlPower"] == "3000"
+    assert calls_to(mock_api, "/v2/SetPeakControlSetting")[-1]["peakControlPower"] == "30"
 
 
 async def test_load_stage_rejects_open_soc_not_below_close(hass: HomeAssistant, init_integration) -> None:

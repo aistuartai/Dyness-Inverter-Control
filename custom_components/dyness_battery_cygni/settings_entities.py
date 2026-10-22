@@ -236,7 +236,8 @@ def make_peak_entities(coordinator, entry):
         _SettingsNumber(
             coordinator, entry,
             uid_suffix="peak_power", ref_key="peak_power",
-            min_v=0, max_v=10000, step=100, unit=UnitOfPower.WATT,
+            # Spec p35 allows 0-65535 W; small values (e.g. 30 W) matter for near-zero import.
+            min_v=0, max_v=10000, step=10, unit=UnitOfPower.WATT,
             icon="mdi:lightning-bolt",
             tk="peak_power", default=1000,
         ),
