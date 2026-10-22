@@ -1,2 +1,7 @@
 push_to_fork.ps1
 reset_fork.ps1
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml

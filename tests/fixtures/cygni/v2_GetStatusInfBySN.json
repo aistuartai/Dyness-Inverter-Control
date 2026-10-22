@@ -1,0 +1,19 @@
+{
+ "code": "200",
+ "data": {
+  "safeCountry": "6",
+  "runModel": "3",
+  "workStatus": "1",
+  "meterCommunication": "0",
+  "sparePower": "1",
+  "powerLimit": "1",
+  "antiReverseFlowStatus": null,
+  "antiReverseFlowPower": null,
+  "pcsWorkStatus": null,
+  "batteryCommunication": "0",
+  "gridConnectionStatus": null,
+  "backupWorkStatus": null,
+  "generatorStatus": null
+ },
+ "info": "Request successful"
+}

@@ -1,0 +1,1134 @@
+{
+ "code": "200",
+ "data": [
+  {
+   "flag": false,
+   "pointId": "T",
+   "pointValue": "2026-10-21 20:14:30",
+   "pointNameCn": "数据采集时间"
+  },
+  {
+   "flag": false,
+   "pointId": "0",
+   "pointValue": "511",
+   "pointNameCn": "通信协议版本"
+  },
+  {
+   "flag": false,
+   "pointId": "1",
+   "pointValue": "9999",
+   "pointNameCn": "逆变器额定容量"
+  },
+  {
+   "flag": false,
+   "pointId": "2",
+   "pointValue": "0",
+   "pointNameCn": "输出方式"
+  },
+  {
+   "flag": false,
+   "pointId": "3",
+   "pointValue": "FAKESN000000000000001",
+   "pointNameCn": "序列号"
+  },
+  {
+   "flag": false,
+   "pointId": "16",
+   "pointValue": "21",
+   "pointNameCn": "DSP1版本号"
+  },
+  {
+   "flag": false,
+   "pointId": "17",
+   "pointValue": "21",
+   "pointNameCn": "DSP2版本号"
+  },
+  {
+   "flag": false,
+   "pointId": "18",
+   "pointValue": "229",
+   "pointNameCn": "DSP SVN版本"
+  },
+  {
+   "flag": false,
+   "pointId": "19",
+   "pointValue": "21",
+   "pointNameCn": "ARM 版本号"
+  },
+  {
+   "flag": false,
+   "pointId": "20",
+   "pointValue": "511",
+   "pointNameCn": "ARM SVN版本"
+  },
+  {
+   "flag": false,
+   "pointId": "21",
+   "pointValue": "",
+   "pointNameCn": "DSP内部固件版本"
+  },
+  {
+   "flag": false,
+   "pointId": "27",
+   "pointValue": "02034-04-S01",
+   "pointNameCn": "ARM内部固件版本"
+  },
+  {
+   "flag": false,
+   "pointId": "33",
+   "pointValue": "10",
+   "pointNameCn": "设备硬件版本"
+  },
+  {
+   "flag": false,
+   "pointId": "35",
+   "pointValue": "60670",
+   "pointNameCn": "制造商"
+  },
+  {
+   "flag": false,
+   "pointId": "43",
+   "pointValue": "",
+   "pointNameCn": "功率系数"
+  },
+  {
+   "flag": false,
+   "pointId": "44",
+   "pointValue": "",
+   "pointNameCn": "ARC软件版本"
+  },
+  {
+   "flag": false,
+   "pointId": "45",
+   "pointValue": "",
+   "pointNameCn": "ARC SVN版本"
+  },
+  {
+   "flag": false,
+   "pointId": "46",
+   "pointValue": "0",
+   "pointNameCn": "BOX软件版本"
+  },
+  {
+   "flag": false,
+   "pointId": "47",
+   "pointValue": "0",
+   "pointNameCn": "BOX SVN版本"
+  },
+  {
+   "flag": false,
+   "pointId": "48",
+   "pointValue": "9999",
+   "pointNameCn": "电池充电额定功率"
+  },
+  {
+   "flag": false,
+   "pointId": "49",
+   "pointValue": "9999",
+   "pointNameCn": "电池放电额定功率"
+  },
+  {
+   "flag": false,
+   "pointId": "50",
+   "pointValue": "0",
+   "pointNameCn": "AC额定功率"
+  },
+  {
+   "flag": false,
+   "pointId": "100-1",
+   "pointValue": "26",
+   "pointNameCn": "RTC时间年"
+  },
+  {
+   "flag": false,
+   "pointId": "100-2",
+   "pointValue": "10",
+   "pointNameCn": "RTC时间月"
+  },
+  {
+   "flag": false,
+   "pointId": "101-1",
+   "pointValue": "22",
+   "pointNameCn": "RTC时间日"
+  },
+  {
+   "flag": false,
+   "pointId": "101-2",
+   "pointValue": "7",
+   "pointNameCn": "RTC时间时"
+  },
+  {
+   "flag": false,
+   "pointId": "102-1",
+   "pointValue": "14",
+   "pointNameCn": "RTC时间分"
+  },
+  {
+   "flag": false,
+   "pointId": "102-2",
+   "pointValue": "25",
+   "pointNameCn": "RTC时间秒"
+  },
+  {
+   "flag": false,
+   "pointId": "103",
+   "pointValue": "210.9",
+   "pointNameCn": "PV1电压"
+  },
+  {
+   "flag": false,
+   "pointId": "104",
+   "pointValue": "0.3",
+   "pointNameCn": "PV1电流"
+  },
+  {
+   "flag": false,
+   "pointId": "105",
+   "pointValue": "63",
+   "pointNameCn": "PV1功率"
+  },
+  {
+   "flag": false,
+   "pointId": "106",
+   "pointValue": "214.7",
+   "pointNameCn": "PV2电压"
+  },
+  {
+   "flag": false,
+   "pointId": "107",
+   "pointValue": "0.2",
+   "pointNameCn": "PV2电流"
+  },
+  {
+   "flag": false,
+   "pointId": "108",
+   "pointValue": "0",
+   "pointNameCn": "PV2功率"
+  },
+  {
+   "flag": false,
+   "pointId": "109",
+   "pointValue": "364.3",
+   "pointNameCn": "PV3电压"
+  },
+  {
+   "flag": false,
+   "pointId": "110",
+   "pointValue": "0.1",
+   "pointNameCn": "PV3电流"
+  },
+  {
+   "flag": false,
+   "pointId": "111",
+   "pointValue": "0",
+   "pointNameCn": "PV3功率"
+  },
+  {
+   "flag": false,
+   "pointId": "112",
+   "pointValue": "0.9",
+   "pointNameCn": "PV4电压"
+  },
+  {
+   "flag": false,
+   "pointId": "113",
+   "pointValue": "0",
+   "pointNameCn": "PV4电流"
+  },
+  {
+   "flag": false,
+   "pointId": "114",
+   "pointValue": "0",
+   "pointNameCn": "PV4功率"
+  },
+  {
+   "flag": false,
+   "pointId": "115-1",
+   "pointValue": "42",
+   "pointNameCn": "PV1状态"
+  },
+  {
+   "flag": false,
+   "pointId": "115-2",
+   "pointValue": "42",
+   "pointNameCn": "PV2状态"
+  },
+  {
+   "flag": false,
+   "pointId": "115-3",
+   "pointValue": "42",
+   "pointNameCn": "PV3状态"
+  },
+  {
+   "flag": false,
+   "pointId": "115-4",
+   "pointValue": "42",
+   "pointNameCn": "PV4状态"
+  },
+  {
+   "flag": false,
+   "pointId": "116",
+   "pointValue": "0",
+   "pointNameCn": "Count down"
+  },
+  {
+   "flag": false,
+   "pointId": "117",
+   "pointValue": "239.4",
+   "pointNameCn": "R相逆变输出电压"
+  },
+  {
+   "flag": false,
+   "pointId": "118",
+   "pointValue": "3.6",
+   "pointNameCn": "R相逆变输出电流"
+  },
+  {
+   "flag": false,
+   "pointId": "119",
+   "pointValue": "50.00",
+   "pointNameCn": "R相逆变输出频率"
+  },
+  {
+   "flag": false,
+   "pointId": "120-121",
+   "pointValue": "643",
+   "pointNameCn": "R相逆变输出功率"
+  },
+  {
+   "flag": false,
+   "pointId": "122",
+   "pointValue": "0",
+   "pointNameCn": "S相逆变输出电压"
+  },
+  {
+   "flag": false,
+   "pointId": "123",
+   "pointValue": "0",
+   "pointNameCn": "S相逆变输出电流"
+  },
+  {
+   "flag": false,
+   "pointId": "124",
+   "pointValue": "50.03",
+   "pointNameCn": "S相逆变输出频率"
+  },
+  {
+   "flag": false,
+   "pointId": "125-126",
+   "pointValue": "0",
+   "pointNameCn": "S相逆变输出功率"
+  },
+  {
+   "flag": false,
+   "pointId": "127",
+   "pointValue": "0",
+   "pointNameCn": "T相逆变输出电压"
+  },
+  {
+   "flag": false,
+   "pointId": "128",
+   "pointValue": "0",
+   "pointNameCn": "T相逆变输出电流"
+  },
+  {
+   "flag": false,
+   "pointId": "129",
+   "pointValue": "50.03",
+   "pointNameCn": "T相逆变输出频率"
+  },
+  {
+   "flag": false,
+   "pointId": "130-131",
+   "pointValue": "0",
+   "pointNameCn": "T相逆变输出功率"
+  },
+  {
+   "flag": false,
+   "pointId": "132-1",
+   "pointValue": "1",
+   "pointNameCn": "电网状态"
+  },
+  {
+   "flag": false,
+   "pointId": "133-134",
+   "pointValue": "645",
+   "pointNameCn": "有功功率"
+  },
+  {
+   "flag": false,
+   "pointId": "135-136",
+   "pointValue": "570",
+   "pointNameCn": "无功功率"
+  },
+  {
+   "flag": false,
+   "pointId": "135",
+   "pointValue": "570",
+   "pointNameCn": "交流无功功率"
+  },
+  {
+   "flag": false,
+   "pointId": "137-138",
+   "pointValue": "861",
+   "pointNameCn": "视在功率"
+  },
+  {
+   "flag": false,
+   "pointId": "137",
+   "pointValue": "861",
+   "pointNameCn": "交流视在功率"
+  },
+  {
+   "flag": false,
+   "pointId": "139",
+   "pointValue": "238.7",
+   "pointNameCn": "R相备用输出电压"
+  },
+  {
+   "flag": false,
+   "pointId": "140",
+   "pointValue": "0.2",
+   "pointNameCn": "R相备用输出电流"
+  },
+  {
+   "flag": false,
+   "pointId": "141",
+   "pointValue": "50.03",
+   "pointNameCn": "R相备用输出频率"
+  },
+  {
+   "flag": false,
+   "pointId": "141",
+   "pointValue": "50.03",
+   "pointNameCn": "逆变Backup侧R相频率"
+  },
+  {
+   "flag": false,
+   "pointId": "142",
+   "pointValue": "0",
+   "pointNameCn": "INV pow limit R"
+  },
+  {
+   "flag": false,
+   "pointId": "143-144",
+   "pointValue": "0",
+   "pointNameCn": "R相备用输出功率"
+  },
+  {
+   "flag": false,
+   "pointId": "145",
+   "pointValue": "0",
+   "pointNameCn": "S相备用输出电压"
+  },
+  {
+   "flag": false,
+   "pointId": "146",
+   "pointValue": "0",
+   "pointNameCn": "S相备用输出电流"
+  },
+  {
+   "flag": false,
+   "pointId": "147",
+   "pointValue": "50.03",
+   "pointNameCn": "S相备用输出频率"
+  },
+  {
+   "flag": false,
+   "pointId": "147",
+   "pointValue": "50.03",
+   "pointNameCn": "逆变Backup侧S相频率"
+  },
+  {
+   "flag": false,
+   "pointId": "148",
+   "pointValue": "0",
+   "pointNameCn": "INV pow limit S"
+  },
+  {
+   "flag": false,
+   "pointId": "149-150",
+   "pointValue": "0",
+   "pointNameCn": "S相备用输出功率"
+  },
+  {
+   "flag": false,
+   "pointId": "151",
+   "pointValue": "0",
+   "pointNameCn": "T相备用输出电压"
+  },
+  {
+   "flag": false,
+   "pointId": "152",
+   "pointValue": "0",
+   "pointNameCn": "T相备用输出电流"
+  },
+  {
+   "flag": false,
+   "pointId": "153",
+   "pointValue": "50.03",
+   "pointNameCn": "T相备用输出频率"
+  },
+  {
+   "flag": false,
+   "pointId": "153",
+   "pointValue": "50.03",
+   "pointNameCn": "逆变Backup侧T相频率"
+  },
+  {
+   "flag": false,
+   "pointId": "154",
+   "pointValue": "0",
+   "pointNameCn": "INV pow limit T"
+  },
+  {
+   "flag": false,
+   "pointId": "155-156",
+   "pointValue": "0",
+   "pointNameCn": "T相备用输出功率"
+  },
+  {
+   "flag": false,
+   "pointId": "157-158",
+   "pointValue": "617",
+   "pointNameCn": "R相负载有功功率"
+  },
+  {
+   "flag": false,
+   "pointId": "159-160",
+   "pointValue": "0",
+   "pointNameCn": "S相负载有功功率"
+  },
+  {
+   "flag": false,
+   "pointId": "161-162",
+   "pointValue": "0",
+   "pointNameCn": "T相负载有功功率"
+  },
+  {
+   "flag": false,
+   "pointId": "163",
+   "pointValue": "0",
+   "pointNameCn": "Ups Load Percent"
+  },
+  {
+   "flag": false,
+   "pointId": "164",
+   "pointValue": "33.9",
+   "pointNameCn": "内部温度"
+  },
+  {
+   "flag": false,
+   "pointId": "165",
+   "pointValue": "29.4",
+   "pointNameCn": "散热器温度"
+  },
+  {
+   "flag": false,
+   "pointId": "166",
+   "pointValue": "29.4",
+   "pointNameCn": "模块温度"
+  },
+  {
+   "flag": false,
+   "pointId": "167",
+   "pointValue": "33",
+   "pointNameCn": "Function bit value"
+  },
+  {
+   "flag": false,
+   "pointId": "168",
+   "pointValue": "447.0",
+   "pointNameCn": "BUS电压"
+  },
+  {
+   "flag": false,
+   "pointId": "169",
+   "pointValue": "0.1",
+   "pointNameCn": "N BUS电压"
+  },
+  {
+   "flag": false,
+   "pointId": "170",
+   "pointValue": "397.3",
+   "pointNameCn": "电池电压"
+  },
+  {
+   "flag": false,
+   "pointId": "171",
+   "pointValue": "1.2",
+   "pointNameCn": "电池电流"
+  },
+  {
+   "flag": false,
+   "pointId": "172",
+   "pointValue": "476",
+   "pointNameCn": "电池功率"
+  },
+  {
+   "flag": false,
+   "pointId": "173",
+   "pointValue": "2",
+   "pointNameCn": "电池状态"
+  },
+  {
+   "flag": false,
+   "pointId": "174",
+   "pointValue": "0",
+   "pointNameCn": "报警信息"
+  },
+  {
+   "flag": false,
+   "pointId": "175",
+   "pointValue": "6",
+   "pointNameCn": "安规国家"
+  },
+  {
+   "flag": false,
+   "pointId": "176",
+   "pointValue": "1",
+   "pointNameCn": "工作状态"
+  },
+  {
+   "flag": false,
+   "pointId": "177",
+   "pointValue": "0",
+   "pointNameCn": "故障信息"
+  },
+  {
+   "flag": false,
+   "pointId": "179",
+   "pointValue": "0",
+   "pointNameCn": "拓展故障信息"
+  },
+  {
+   "flag": false,
+   "pointId": "181-182",
+   "pointValue": "3599.2",
+   "pointNameCn": "累计发电量"
+  },
+  {
+   "flag": false,
+   "pointId": "183",
+   "pointValue": "0",
+   "pointNameCn": "当日发电量"
+  },
+  {
+   "flag": false,
+   "pointId": "184-185",
+   "pointValue": "855.7",
+   "pointNameCn": "累计卖电量"
+  },
+  {
+   "flag": false,
+   "pointId": "186-187",
+   "pointValue": "4483",
+   "pointNameCn": "总运行时间"
+  },
+  {
+   "flag": false,
+   "pointId": "188",
+   "pointValue": "0.1",
+   "pointNameCn": "当日卖电量"
+  },
+  {
+   "flag": false,
+   "pointId": "189-190",
+   "pointValue": "1816.3",
+   "pointNameCn": "累计买电量"
+  },
+  {
+   "flag": false,
+   "pointId": "191",
+   "pointValue": "0.2",
+   "pointNameCn": "当日买电量"
+  },
+  {
+   "flag": false,
+   "pointId": "192-193",
+   "pointValue": "3991.3",
+   "pointNameCn": "累计用电量(总用电量)"
+  },
+  {
+   "flag": false,
+   "pointId": "194",
+   "pointValue": "3.2",
+   "pointNameCn": "当日用电量"
+  },
+  {
+   "flag": false,
+   "pointId": "195-196",
+   "pointValue": "2567.3",
+   "pointNameCn": "电池总充电电量"
+  },
+  {
+   "flag": false,
+   "pointId": "197",
+   "pointValue": "0",
+   "pointNameCn": "电池当日充电电量"
+  },
+  {
+   "flag": false,
+   "pointId": "198-199",
+   "pointValue": "2334.6",
+   "pointNameCn": "电池总放电电量"
+  },
+  {
+   "flag": false,
+   "pointId": "200",
+   "pointValue": "3.3",
+   "pointNameCn": "电池当日放电电量"
+  },
+  {
+   "flag": false,
+   "pointId": "201",
+   "pointValue": "0",
+   "pointNameCn": "CPLD warning code"
+  },
+  {
+   "flag": false,
+   "pointId": "202-1",
+   "pointValue": "208",
+   "pointNameCn": "电表安装状态"
+  },
+  {
+   "flag": false,
+   "pointId": "202-2",
+   "pointValue": "208",
+   "pointNameCn": "电表通讯状态"
+  },
+  {
+   "flag": false,
+   "pointId": "202-3",
+   "pointValue": "18350288",
+   "pointNameCn": "并网功率限制"
+  },
+  {
+   "flag": false,
+   "pointId": "202-4",
+   "pointValue": "18350288",
+   "pointNameCn": "电池强充状态"
+  },
+  {
+   "flag": false,
+   "pointId": "202-203",
+   "pointValue": "18350288",
+   "pointNameCn": "DiagStatusL"
+  },
+  {
+   "flag": false,
+   "pointId": "204-1",
+   "pointValue": "8536",
+   "pointNameCn": "外置CT状态"
+  },
+  {
+   "flag": false,
+   "pointId": "204-2",
+   "pointValue": "8536",
+   "pointNameCn": "BMS通讯状态"
+  },
+  {
+   "flag": false,
+   "pointId": "204-3",
+   "pointValue": "8536",
+   "pointNameCn": "备用电源"
+  },
+  {
+   "flag": false,
+   "pointId": "204-4",
+   "pointValue": "8536",
+   "pointNameCn": "电池通信状态"
+  },
+  {
+   "flag": false,
+   "pointId": "204-5",
+   "pointValue": "8536",
+   "pointNameCn": "电池Ready"
+  },
+  {
+   "flag": false,
+   "pointId": "204-6",
+   "pointValue": "8536",
+   "pointNameCn": "并机状态"
+  },
+  {
+   "flag": false,
+   "pointId": "204-7",
+   "pointValue": "8536",
+   "pointNameCn": "并机角色"
+  },
+  {
+   "flag": false,
+   "pointId": "204-8",
+   "pointValue": "8536",
+   "pointNameCn": "并机相位"
+  },
+  {
+   "flag": false,
+   "pointId": "204-9",
+   "pointValue": "8536",
+   "pointNameCn": "BOX通信状态"
+  },
+  {
+   "flag": false,
+   "pointId": "204-10",
+   "pointValue": "8536",
+   "pointNameCn": "BOX安装状态"
+  },
+  {
+   "flag": false,
+   "pointId": "204-205",
+   "pointValue": "8536",
+   "pointNameCn": "DiagStatusH"
+  },
+  {
+   "flag": false,
+   "pointId": "206",
+   "pointValue": "0",
+   "pointNameCn": "wChargerCtrlFlg"
+  },
+  {
+   "flag": false,
+   "pointId": "207",
+   "pointValue": "0",
+   "pointNameCn": "wBattCtrlFlagBySafety"
+  },
+  {
+   "flag": false,
+   "pointId": "208-209",
+   "pointValue": "0",
+   "pointNameCn": "sdwBattPowerLmtBySafety"
+  },
+  {
+   "flag": false,
+   "pointId": "210",
+   "pointValue": "3",
+   "pointNameCn": "BatteryCtrlMode"
+  },
+  {
+   "flag": false,
+   "pointId": "211-212",
+   "pointValue": "28901376",
+   "pointNameCn": "BatteryCtrlPower"
+  },
+  {
+   "flag": false,
+   "pointId": "214",
+   "pointValue": "3",
+   "pointNameCn": "运行模式"
+  },
+  {
+   "flag": false,
+   "pointId": "215",
+   "pointValue": "3834",
+   "pointNameCn": "SelfDefine10"
+  },
+  {
+   "flag": false,
+   "pointId": "216",
+   "pointValue": "4161",
+   "pointNameCn": "SelfDefine9"
+  },
+  {
+   "flag": false,
+   "pointId": "217",
+   "pointValue": "0",
+   "pointNameCn": "SelfDefine8"
+  },
+  {
+   "flag": false,
+   "pointId": "218",
+   "pointValue": "0",
+   "pointNameCn": "SelfDefine7"
+  },
+  {
+   "flag": false,
+   "pointId": "219",
+   "pointValue": "0",
+   "pointNameCn": "SelfDefine6"
+  },
+  {
+   "flag": false,
+   "pointId": "220",
+   "pointValue": "0",
+   "pointNameCn": "SelfDefine5"
+  },
+  {
+   "flag": false,
+   "pointId": "221",
+   "pointValue": "0",
+   "pointNameCn": "SelfDefine4"
+  },
+  {
+   "flag": false,
+   "pointId": "222",
+   "pointValue": "9999",
+   "pointNameCn": "SelfDefine3"
+  },
+  {
+   "flag": false,
+   "pointId": "223",
+   "pointValue": "229",
+   "pointNameCn": "SelfDefine2"
+  },
+  {
+   "flag": false,
+   "pointId": "224",
+   "pointValue": "21",
+   "pointNameCn": "SelfDefine1"
+  },
+  {
+   "flag": false,
+   "pointId": "250",
+   "pointValue": "0",
+   "pointNameCn": "电网相关详细故障告警1"
+  },
+  {
+   "flag": false,
+   "pointId": "251",
+   "pointValue": "0",
+   "pointNameCn": "电网相关详细故障告警2"
+  },
+  {
+   "flag": false,
+   "pointId": "252",
+   "pointValue": "0",
+   "pointNameCn": "电网相关详细故障告警3"
+  },
+  {
+   "flag": false,
+   "pointId": "253",
+   "pointValue": "0",
+   "pointNameCn": "电网相关详细故障告警4"
+  },
+  {
+   "flag": false,
+   "pointId": "254",
+   "pointValue": "0",
+   "pointNameCn": "逆变器保护相关详细故障报警1"
+  },
+  {
+   "flag": false,
+   "pointId": "255",
+   "pointValue": "0",
+   "pointNameCn": "逆变器保护相关详细故障报警2"
+  },
+  {
+   "flag": false,
+   "pointId": "256",
+   "pointValue": "0",
+   "pointNameCn": "逆变器保护相关详细故障报警3"
+  },
+  {
+   "flag": false,
+   "pointId": "257",
+   "pointValue": "0",
+   "pointNameCn": "逆变器保护相关详细故障报警4"
+  },
+  {
+   "flag": false,
+   "pointId": "258",
+   "pointValue": "0",
+   "pointNameCn": "逆变器状态相关详细信息1"
+  },
+  {
+   "flag": false,
+   "pointId": "259",
+   "pointValue": "0",
+   "pointNameCn": "逆变器状态相关详细信息2"
+  },
+  {
+   "flag": false,
+   "pointId": "260",
+   "pointValue": "0",
+   "pointNameCn": "逆变器状态相关详细信息3"
+  },
+  {
+   "flag": false,
+   "pointId": "261",
+   "pointValue": "0",
+   "pointNameCn": "逆变器状态相关详细信息4"
+  },
+  {
+   "flag": false,
+   "pointId": "262",
+   "pointValue": "3982",
+   "pointNameCn": "第二路电池电压"
+  },
+  {
+   "flag": false,
+   "pointId": "263",
+   "pointValue": "6",
+   "pointNameCn": "第二路电池电流"
+  },
+  {
+   "flag": false,
+   "pointId": "264",
+   "pointValue": "242",
+   "pointNameCn": "第二路电池功率"
+  },
+  {
+   "flag": false,
+   "pointId": "265-1",
+   "pointValue": "0",
+   "pointNameCn": "第二路电池状态"
+  },
+  {
+   "flag": false,
+   "pointId": "266",
+   "pointValue": "2389",
+   "pointNameCn": "公共电网侧R相电压/单相机公共电网侧电压"
+  },
+  {
+   "flag": false,
+   "pointId": "267",
+   "pointValue": "55",
+   "pointNameCn": "公共电网侧R相电流/单相机公共电网侧电流"
+  },
+  {
+   "flag": false,
+   "pointId": "268",
+   "pointValue": "0",
+   "pointNameCn": "公共电网侧R相功率/单相机公共电网侧功率"
+  },
+  {
+   "flag": false,
+   "pointId": "270",
+   "pointValue": "2359",
+   "pointNameCn": "公共电网侧S相电压"
+  },
+  {
+   "flag": false,
+   "pointId": "271",
+   "pointValue": "2",
+   "pointNameCn": "公共电网侧S相电流"
+  },
+  {
+   "flag": false,
+   "pointId": "272",
+   "pointValue": "0",
+   "pointNameCn": "公共电网侧S相功率"
+  },
+  {
+   "flag": false,
+   "pointId": "274",
+   "pointValue": "0",
+   "pointNameCn": "公共电网侧T相电压"
+  },
+  {
+   "flag": false,
+   "pointId": "275",
+   "pointValue": "0",
+   "pointNameCn": "公共电网侧T相电流"
+  },
+  {
+   "flag": false,
+   "pointId": "276",
+   "pointValue": "0",
+   "pointNameCn": "公共电网侧T相功率"
+  },
+  {
+   "flag": false,
+   "pointId": "278",
+   "pointValue": "5001",
+   "pointNameCn": "公共电网频率"
+  },
+  {
+   "flag": false,
+   "pointId": "279",
+   "pointValue": "0",
+   "pointNameCn": "并机系统PV总输入功率"
+  },
+  {
+   "flag": false,
+   "pointId": "281",
+   "pointValue": "0",
+   "pointNameCn": "并机系统AC总功率"
+  },
+  {
+   "flag": false,
+   "pointId": "283",
+   "pointValue": "0",
+   "pointNameCn": "并机系统AC频率"
+  },
+  {
+   "flag": false,
+   "pointId": "284",
+   "pointValue": "0",
+   "pointNameCn": "并机系统R相电压"
+  },
+  {
+   "flag": false,
+   "pointId": "285",
+   "pointValue": "0",
+   "pointNameCn": "并机系统R相总电流"
+  },
+  {
+   "flag": false,
+   "pointId": "286",
+   "pointValue": "0",
+   "pointNameCn": "并机系统R相总功率"
+  },
+  {
+   "flag": false,
+   "pointId": "288",
+   "pointValue": "0",
+   "pointNameCn": "并机系统S相电压"
+  },
+  {
+   "flag": false,
+   "pointId": "289",
+   "pointValue": "0",
+   "pointNameCn": "并机系统S相总电流"
+  },
+  {
+   "flag": false,
+   "pointId": "290",
+   "pointValue": "10",
+   "pointNameCn": "发电机R相电压/单相发电机电压"
+  },
+  {
+   "flag": false,
+   "pointId": "291",
+   "pointValue": "3",
+   "pointNameCn": "发电机R相电流/单相发电机电流"
+  },
+  {
+   "flag": false,
+   "pointId": "292",
+   "pointValue": "0",
+   "pointNameCn": "发电机R相频率/单相发电机频率"
+  },
+  {
+   "flag": false,
+   "pointId": "293",
+   "pointValue": "-1",
+   "pointNameCn": "发电机R相功率/单相发电机功率"
+  },
+  {
+   "flag": false,
+   "pointId": "294",
+   "pointValue": "0",
+   "pointNameCn": "发电机S相电压"
+  },
+  {
+   "flag": false,
+   "pointId": "295",
+   "pointValue": "0",
+   "pointNameCn": "发电机S相电流"
+  },
+  {
+   "flag": false,
+   "pointId": "296",
+   "pointValue": "0",
+   "pointNameCn": "发电机S相频率"
+  },
+  {
+   "flag": false,
+   "pointId": "297",
+   "pointValue": "0",
+   "pointNameCn": "发电机S相功率"
+  }
+ ],
+ "_fixture_note": "truncated at ~16KB by HA journal; list cut after last complete item"
+}

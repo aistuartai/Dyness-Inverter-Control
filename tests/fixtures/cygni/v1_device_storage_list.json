@@ -1,0 +1,35 @@
+{
+ "code": "200",
+ "data": {
+  "list": [
+   {
+    "deviceSn": "FAKESN000000000000001",
+    "collectorSn": "FAKECOL001",
+    "deviceName": "Cygni 10.0HS-M8",
+    "deviceCommunicationStatus": "Online",
+    "deviceCommunicationStatusCode": "1",
+    "deviceModelName": "Cygni 10.0HS-M8",
+    "deviceModelCode": "192",
+    "parentCode": "28",
+    "parentName": null,
+    "factory": "4",
+    "batteryCategory": "6",
+    "productType": "4",
+    "workStatus": "Grid-tied",
+    "stationId": "100000000000001",
+    "stationName": "Test Station",
+    "position": "1 Example Street, Testville VIC 3000, Australia",
+    "systemType": "20012",
+    "stationType": "20001",
+    "firmwareVersion": "21.21.229-21.511",
+    "operationPermission": "1",
+    "createTime": "2026-04-13 04:50:28",
+    "masterSlaveStatus": null
+   }
+  ],
+  "pageNum": 1,
+  "pageSize": 10,
+  "total": 1
+ },
+ "info": "Request successful"
+}

@@ -1,0 +1,9 @@
+{
+ "code": "200",
+ "data": {
+  "installedPower": "13.7",
+  "batteryCapacity": "30.72",
+  "inverterTotalPower": "9.999"
+ },
+ "info": "Request successful"
+}

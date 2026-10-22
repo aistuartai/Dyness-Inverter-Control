@@ -1,0 +1,8 @@
+# Pins Home Assistant + pytest/syrupy/pytest-asyncio to a matching set.
+# Bump together with the HA version the suite targets (see README "Development").
+pytest-homeassistant-custom-component==0.13.373
+pytest-cov==7.1.0
+ruff==0.17.2
+# TEMPORARY: the integration still imports async_timeout, which HA no longer ships.
+# Remove once __init__.py moves to asyncio.timeout (2.8.0 fix list).
+async-timeout

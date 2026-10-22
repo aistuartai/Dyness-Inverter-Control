@@ -1,0 +1,27 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-p no:cacheprovider"
+
+[tool.coverage.run]
+source = ["custom_components/dyness_battery_cygni"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+target-version = "py314"
+line-length = 120
+
+[tool.ruff.lint]
+# Correctness-focused set; style rules are left off to avoid churning existing code.
+select = ["E9", "F", "B", "ASYNC", "PLE"]
+ignore = ["B904"]
+
+[tool.ruff.lint.per-file-ignores]
+# TEMPORARY: two dead locals in the 1100-line update method; removed in the 2.8.0 parsers.py refactor.
+"custom_components/dyness_battery_cygni/__init__.py" = ["F841"]
