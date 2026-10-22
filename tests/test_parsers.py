@@ -114,10 +114,17 @@ def test_v2_unknown_codes_pass_through() -> None:
     v2 = {"bmsCommunicationStatus": "7", "meterType": "0", "meterCommunicationStatus": "1", "bmsSoftwareVersion": "1.2"}
     status = {"sparePower": "0", "powerLimit": "2"}
     data, _ = build_data(_src("Cygni 10.0HS-M8", v2_realtime_data=v2, v2_status_data=status), {})
-    assert data["meterType"] == "0"                  # 2.8.0 fix list: 0 = not connected
+    assert data["bmsCommunicationStatus"] == "7"     # unknown codes pass through
+    assert data["meterType"] == "Not Connected"      # spec p17
     assert data["meterCommunicationStatus"] == "Abnormal"
     assert data["bmsSoftwareVersion"] == "1.2"
     assert (data["sparePower"], data["powerLimitActive"]) == ("Off", "2")
+
+
+@pytest.mark.parametrize(("raw", "label"), [("0", "Abnormal"), ("1", "Normal")])
+def test_bms_communication_one_is_normal(raw: str, label: str) -> None:
+    data, _ = build_data(_src("Cygni 10.0HS-M8", v2_realtime_data={"bmsCommunicationStatus": raw}), {})
+    assert data["bmsCommunicationStatus"] == label
 
 
 def test_v2_sparse_payloads_leave_fields_unset() -> None:

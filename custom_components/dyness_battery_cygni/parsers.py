@@ -715,10 +715,15 @@ def build_data(src: ParseInput, data: dict | list) -> tuple[dict, list[str]]:
         pass
 
     # ── v2 API Felder ─────────────────────────────────────────
+    # The two v2 comm flags use opposite conventions (spec p17-18, confirmed on a Cygni 2026-10-22):
+    # meterCommunicationStatus 0 = Normal, bmsCommunicationStatus 1 = Normal.
     _COMM_STATUS   = {"0": "Normal", "1": "Abnormal"}
-    _METER_TYPE    = {"1": "CT", "2": "Smart Meter"}
+    _BMS_COMM      = {"0": "Abnormal", "1": "Normal"}
+    _METER_TYPE    = {"0": "Not Connected", "1": "CT", "2": "Smart Meter"}
     _ON_OFF        = {"0": "Off", "1": "On"}
-    _POWER_LIMIT   = {"0": "Not Limited", "1": "Limiting"}
+    # GetStatusInfBySN powerLimit = whether the export (grid power) limit is switched on,
+    # not whether it is limiting right now (reads 1 overnight with zero PV).
+    _POWER_LIMIT   = {"0": "Disabled", "1": "Enabled"}
 
     if src.v2_realtime_data:
         for key, v2key in [
@@ -737,7 +742,7 @@ def build_data(src: ParseInput, data: dict | list) -> tuple[dict, list[str]]:
         # String-mapped fields from v2 realtime
         raw = src.v2_realtime_data
         if raw.get("bmsCommunicationStatus") is not None:
-            data["bmsCommunicationStatus"] = _COMM_STATUS.get(str(raw["bmsCommunicationStatus"]), raw["bmsCommunicationStatus"])
+            data["bmsCommunicationStatus"] = _BMS_COMM.get(str(raw["bmsCommunicationStatus"]), raw["bmsCommunicationStatus"])
         if raw.get("bmsSoftwareVersion") is not None:
             data["bmsSoftwareVersion"] = raw["bmsSoftwareVersion"]
         if raw.get("meterType") is not None:

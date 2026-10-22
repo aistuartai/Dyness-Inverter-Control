@@ -14,7 +14,7 @@
     'batteryDischargeTotal': 2334.6,
     'batteryStatus': 'Discharging',
     'batteryVoltage': 397.3,
-    'bmsCommunicationStatus': 'Abnormal',
+    'bmsCommunicationStatus': 'Normal',
     'busVoltage': 447.0,
     'chargeCurrentLimit': 64.0,
     'createTime': '2026-10-21 12:50:00',
@@ -44,7 +44,7 @@
     'offGridDischargeDepth': 85.0,
     'onGridDischargeDepth': 85.0,
     'packVoltage': '397.3',
-    'powerLimitActive': 'Limiting',
+    'powerLimitActive': 'Enabled',
     'pv1Current': 0.3,
     'pv1Power': 63.0,
     'pv1Voltage': 210.9,
@@ -454,6 +454,13 @@
     dict({
       'category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
       'disabled_by': None,
+      'entity_id': 'sensor.test_station_export_limit',
+      'translation_key': 'power_limit_active',
+      'unique_id': 'powerLimitActive',
+    }),
+    dict({
+      'category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+      'disabled_by': None,
       'entity_id': 'sensor.test_station_firmware_version',
       'translation_key': 'firmware_version',
       'unique_id': 'firmwareVersion',
@@ -597,13 +604,6 @@
       'entity_id': 'sensor.test_station_power',
       'translation_key': 'battery_power',
       'unique_id': 'realTimePower',
-    }),
-    dict({
-      'category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
-      'disabled_by': None,
-      'entity_id': 'sensor.test_station_power_limit_active',
-      'translation_key': 'power_limit_active',
-      'unique_id': 'powerLimitActive',
     }),
     dict({
       'category': None,
@@ -1215,7 +1215,7 @@
       <UnitOfElectricPotential.VOLT: 'V'>,
     ),
     'sensor.test_station_bms_communication_status': tuple(
-      'Abnormal',
+      'Normal',
       None,
     ),
     'sensor.test_station_communication_status': tuple(
@@ -1233,6 +1233,10 @@
     'sensor.test_station_energy_remaining': tuple(
       '22.118',
       <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    ),
+    'sensor.test_station_export_limit': tuple(
+      'Enabled',
+      None,
     ),
     'sensor.test_station_firmware_version': tuple(
       '21.21.229-21.511',
@@ -1317,10 +1321,6 @@
     'sensor.test_station_power': tuple(
       '-476.0',
       <UnitOfPower.WATT: 'W'>,
-    ),
-    'sensor.test_station_power_limit_active': tuple(
-      'Limiting',
-      None,
     ),
     'sensor.test_station_pv_power': tuple(
       '63.0',

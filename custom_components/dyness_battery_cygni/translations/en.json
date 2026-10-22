@@ -305,7 +305,7 @@
         "name": "Backup Port Active"
       },
       "power_limit_active": {
-        "name": "Power Limit Active"
+        "name": "Export Limit"
       },
       "on_grid_discharge_depth": {
         "name": "On-Grid Discharge Depth"

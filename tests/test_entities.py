@@ -109,11 +109,14 @@ async def test_battery_power_negative_while_discharging(hass: HomeAssistant, ini
     assert _state(hass, entry, "batteryStatus") == "Discharging"
 
 
+async def test_export_limit_enabled(hass: HomeAssistant, init_integration) -> None:
+    assert _state(hass, init_integration, "powerLimitActive") == "Enabled"
+
+
 async def test_meter_type_two_is_smart_meter(hass: HomeAssistant, init_integration) -> None:
     assert _state(hass, init_integration, "meterType") == "Smart Meter"
 
 
-@pytest.mark.xfail(strict=True, reason="2.8.0 fix list: realtime bmsCommunicationStatus 1 = Normal (spec p18, hardware)")
 async def test_bms_communication_normal_on_healthy_battery(hass: HomeAssistant, init_integration) -> None:
     assert _state(hass, init_integration, "bmsCommunicationStatus") == "Normal"
 
