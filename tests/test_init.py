@@ -76,6 +76,22 @@ async def test_power_endpoint_failure_keeps_other_data(hass: HomeAssistant, mock
     assert hass.states.get("sensor.test_station_inverter_total_power").state == "429.0"
 
 
+async def test_slow_endpoint_keeps_integration_available(hass: HomeAssistant, mock_config_entry, mock_api) -> None:
+    """Field log 2026-10-22: every third poll hit the 90 s update timeout while the cloud reported
+    "Network Anomaly", taking every sensor unavailable. A timed-out request must only cost its own data."""
+    mock_api.clear_requests()
+    for path, name in READ_ENDPOINTS.items():
+        if path in ("/v2/GetStatusInfBySN", "/v1/device/getLastPowerDataBySn"):
+            mock_api.post(f"{URL_PREFIX}{path}", exc=TimeoutError())
+        else:
+            mock_api.post(f"{URL_PREFIX}{path}", json=load_fixture(name))
+    mock_config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+    assert mock_config_entry.state is ConfigEntryState.LOADED
+    assert hass.states.get("sensor.test_station_inverter_total_power").state == "429.0"
+
+
 async def test_rate_limit_backs_off_then_succeeds(hass: HomeAssistant, mock_config_entry, mock_api) -> None:
     attempts = {"n": 0}
 

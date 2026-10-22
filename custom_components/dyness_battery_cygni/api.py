@@ -25,6 +25,10 @@ _LOGGER = logging.getLogger(__package__)
 MIN_CALL_INTERVAL = 1.5
 RATE_LIMIT_BACKOFF = 10
 MAX_RETRIES = 3
+# Per request. Without it one hung endpoint could use up the coordinator's 90 s update
+# budget and take every sensor unavailable (seen every third poll during Dyness
+# "Network Anomaly" periods); a timed-out request now only costs its own data.
+REQUEST_TIMEOUT = 20
 
 
 def get_gmt_time() -> str:
@@ -108,7 +112,9 @@ class DynessApiClient:
             self._last_call_time = self._now()
             headers = build_headers(self._api_id, self._api_secret, body, path)
             try:
-                async with self._session.post(url, headers=headers, data=body) as response:
+                async with self._session.post(
+                    url, headers=headers, data=body, timeout=aiohttp.ClientTimeout(total=REQUEST_TIMEOUT)
+                ) as response:
                     if response.status == 429:
                         wait = RATE_LIMIT_BACKOFF * (2 ** attempt)
                         _LOGGER.warning(
@@ -127,6 +133,10 @@ class DynessApiClient:
                         _LOGGER.warning("%s %s: non-JSON response (HTTP %s): %s",
                                         label, path, response.status, raw_text[:200])
                         return {}
+            except TimeoutError:
+                _LOGGER.warning("%s %s: no response within %ss — skipping this cycle",
+                                label, path, REQUEST_TIMEOUT)
+                return {}
             except aiohttp.ClientError as e:
                 _LOGGER.warning("%s %s Verbindungsfehler (Versuch %d/%d): %s",
                                 label, path, attempt + 1, MAX_RETRIES, e)

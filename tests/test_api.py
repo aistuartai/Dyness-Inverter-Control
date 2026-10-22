@@ -69,6 +69,13 @@ async def test_connection_error_retries_then_raises(aioclient_mock, client, wait
     assert len(aioclient_mock.mock_calls) == 4
 
 
+async def test_request_timeout_counts_as_no_data(aioclient_mock, client) -> None:
+    """A hung Dyness endpoint must not eat the whole update budget (90 s): give up on it."""
+    aioclient_mock.post(URL, exc=TimeoutError())
+    assert await client.call("/v1/x", {}) == {}
+    assert len(aioclient_mock.mock_calls) == 1          # not retried
+
+
 async def test_default_clock_and_sleep(hass: HomeAssistant, aioclient_mock) -> None:
     aioclient_mock.post(URL, json={"ok": 1})
     client = DynessApiClient(async_get_clientsession(hass), "id", "secret", BASE)
