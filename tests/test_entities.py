@@ -121,6 +121,5 @@ async def test_bms_communication_normal_on_healthy_battery(hass: HomeAssistant, 
     assert _state(hass, init_integration, "bmsCommunicationStatus") == "Normal"
 
 
-@pytest.mark.xfail(strict=True, reason="2.8.0 fix list: module count must be clusters x modules (2 x 4 = 8)")
 async def test_module_count_counts_every_cluster(hass: HomeAssistant, init_integration) -> None:
     assert _state(hass, init_integration, "batteryCount") == "8"

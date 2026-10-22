@@ -135,6 +135,18 @@ def test_v2_sparse_payloads_leave_fields_unset() -> None:
                 "sparePower", "powerLimitActive"} & data.keys()
 
 
+def test_module_count_sums_all_clusters() -> None:
+    v2 = {"clusterList": [{"qtyOfBatModulesPerCluster": "4"}, {"qtyOfBatModulesPerCluster": 4}, "junk"]}
+    data, _ = build_data(_src("Cygni 10.0HS-M8", running_data={"batteryCount": 4}, v2_realtime_data=v2), {})
+    assert data["batteryCount"] == 8
+
+
+def test_module_count_keeps_running_data_without_cluster_list() -> None:
+    data, _ = build_data(_src("Cygni 10.0HS-M8", running_data={"batteryCount": 4},
+                              v2_realtime_data={"clusterList": []}), {})
+    assert data["batteryCount"] == 4
+
+
 def test_flatten_v2_ignores_non_dict_values() -> None:
     assert flatten_v2({"a": {"x": 1}, "b": None, "c": "s", "d": {"y": 2}}) == {"x": 1, "y": 2}
 

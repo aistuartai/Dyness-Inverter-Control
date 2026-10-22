@@ -747,6 +747,12 @@ def build_data(src: ParseInput, data: dict | list) -> tuple[dict, list[str]]:
             data["bmsSoftwareVersion"] = raw["bmsSoftwareVersion"]
         if raw.get("meterType") is not None:
             data["meterType"] = _METER_TYPE.get(str(raw["meterType"]), raw["meterType"])
+        # batteryCount from getLastRunningDataBySn counts the modules of one cluster only;
+        # batteryCellInfo.clusterList lists every cluster (Cygni: 2 x 4 = 8 modules).
+        clusters = [c for c in raw.get("clusterList") or [] if isinstance(c, dict)]
+        total_modules = sum(int(_to_float(c.get("qtyOfBatModulesPerCluster")) or 0) for c in clusters)
+        if total_modules > 0:
+            data["batteryCount"] = total_modules
         if raw.get("meterCommunicationStatus") is not None:
             data["meterCommunicationStatus"] = _COMM_STATUS.get(str(raw["meterCommunicationStatus"]), raw["meterCommunicationStatus"])
 

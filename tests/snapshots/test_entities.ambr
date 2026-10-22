@@ -9,7 +9,7 @@
     'batteryCapacity': 30.72,
     'batteryChargeToday': 0.0,
     'batteryChargeTotal': 2567.3,
-    'batteryCount': '4',
+    'batteryCount': 8,
     'batteryDischargeToday': 3.3,
     'batteryDischargeTotal': 2334.6,
     'batteryStatus': 'Discharging',
@@ -1203,7 +1203,7 @@
       <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     ),
     'sensor.test_station_battery_module_count': tuple(
-      '4',
+      '8',
       None,
     ),
     'sensor.test_station_battery_status': tuple(
