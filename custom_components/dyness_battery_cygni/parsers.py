@@ -597,7 +597,9 @@ def build_data(src: ParseInput, data: dict | list) -> tuple[dict, list[str]]:
     # ── getLastRunningDataBySn Felder ─────────────────────────
     rd = src.running_data
     if rd:
-        _GRID_STATUS = {"0": "Off Grid", "1": "On Grid"}
+        # 2 = grid lost (seen on a Cygni during a grid outage 2026-10-23, with grid voltage 0 V
+        # and the inverter reporting Off-Grid); it was previously shown as the raw "2".
+        _GRID_STATUS = {"0": "Off Grid", "1": "On Grid", "2": "Off Grid"}
         _RUN_MODE    = {"0": "Self-use", "1": "Feed-in Priority", "2": "Backup", "3": "TOU (Time of Use)"}
         _INV_STATUS  = {
             "0": "Waiting", "1": "Grid-Connected", "2": "Off-Grid",

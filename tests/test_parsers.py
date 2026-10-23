@@ -103,6 +103,12 @@ def test_running_data_fallbacks_and_codes() -> None:
     assert "chargeCurrentLimit" not in data and data["dischargeCurrentLimit"] == 64.0
 
 
+@pytest.mark.parametrize(("raw", "label"), [("0", "Off Grid"), ("1", "On Grid"), ("2", "Off Grid"), ("7", "7")])
+def test_grid_status_codes(raw: str, label: str) -> None:
+    data, _ = build_data(_src("Cygni 10.0HS-M8", running_data={"gridStatus": raw}), {})
+    assert data["gridStatus"] == label
+
+
 def test_running_grid_power_negated() -> None:
     data, _ = build_data(_src("Mystery 9000", running_data={"gridPower": "250"}), {})
     assert data["gridPower"] == -250.0               # API + = export; HA convention + = import
