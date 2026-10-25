@@ -1,8 +1,12 @@
 """Request bodies for the Dyness write endpoints (pure, validated).
 
-On/off fields use 1 = On. The PDF spec (v1.0 p.30) says 0 = On for the TOU
-fields; hardware does the opposite (fixed in 2.5.6). The peak/load fields
-follow the same convention but are not yet verified on hardware.
+On/off fields do NOT share one convention:
+
+- TOU group fields (state, dodState, socMaxChargeState): 1 = On. The PDF spec
+  (v1.0 p.30) says 0 = On, but the hardware is the opposite (fixed in 2.5.6).
+- Peak and Load Control fields: 0 = On ("0: Open / 1: Close", spec p.33/p.35).
+  Confirmed for peakControlEnable on a Cygni 2026-10-25: sending 1 turned Peak
+  Control off. The load-control fields follow the spec but are unverified.
 """
 from __future__ import annotations
 
@@ -16,7 +20,13 @@ WORK_MODES = {"0", "2", "3"}   # Self-use, Backup, TOU. Off-grid (1) must be set
 
 
 def _on_off(value) -> str:
+    """TOU fields: 1 = On."""
     return "1" if value else "0"
+
+
+def _open_close(value) -> str:
+    """Peak / Load Control fields: 0 = Open (on), 1 = Close (off)."""
+    return "0" if value else "1"
 
 
 def work_mode(device_sn: str | None, mode: str) -> dict:
@@ -79,7 +89,7 @@ def battery_setting(device_sn: str | None, data: dict) -> dict:
 def peak_control(device_sn: str | None, data: dict) -> dict:
     return {
         "deviceSn":          device_sn,
-        "peakControlEnable": _on_off(data["enabled"]),
+        "peakControlEnable": _open_close(data["enabled"]),
         "triggerSoc":        str(data["trigger_soc"]),
         "timeRange":         f"{data['start_time']}-{data['end_time']}",
         "peakControlPower":  str(data["power"]),
@@ -89,10 +99,10 @@ def peak_control(device_sn: str | None, data: dict) -> dict:
 def load_control(device_sn: str | None, data: dict) -> dict:
     return {
         "deviceSn":              device_sn,
-        "loadSwitch":            _on_off(data["load_switch"]),
+        "loadSwitch":            _open_close(data["load_switch"]),
         "forceCloseTime":        f"{data['force_close_start']}-{data['force_close_end']}",
-        "forceCloseOffGridOnly": _on_off(data["force_close_off_grid_only"]),
-        "alwaysCloseOnGridMode": _on_off(data["always_close_on_grid"]),
+        "forceCloseOffGridOnly": _open_close(data["force_close_off_grid_only"]),
+        "alwaysCloseOnGridMode": _open_close(data["always_close_on_grid"]),
         "relayCloseSoc":         str(data["relay_close_soc"]),
         "relayOpenSoc":          str(data["relay_open_soc"]),
         "pvPowerThreshold":      str(data["pv_power_threshold"]),

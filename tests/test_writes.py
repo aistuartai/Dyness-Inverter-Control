@@ -157,13 +157,21 @@ async def test_peak_control_payload(hass: HomeAssistant, init_integration, mock_
     )
     assert calls_to(mock_api, "/v2/SetPeakControlSetting")[-1] == {
         "deviceSn": DEVICE_SN,
-        # UNVERIFIED on hardware: spec p35 says "0: Open / 1: Close"; the code sends 1 for enabled,
-        # by analogy with the TOU fields. Hardware check is on the 2.8.0 checklist (Q27).
-        "peakControlEnable": "1",
+        # Spec p35 "0: Open / 1: Close" — 0 = enabled, the OPPOSITE of the TOU fields.
+        # Confirmed on a Cygni 2026-10-25: 2.8.x sent "1" for enabled and the app showed Peak Control off.
+        "peakControlEnable": "0",
         "triggerSoc": "20",
         "timeRange": "17:58-21:01",          # spec p35: HH:mm-HH:mm
         "peakControlPower": "30",
     }
+
+
+@pytest.mark.parametrize(("enabled", "sent"), [(True, "0"), (False, "1")])
+async def test_peak_control_enable_uses_open_close(hass: HomeAssistant, init_integration, mock_api, enabled, sent) -> None:
+    await _coordinator(hass, init_integration).async_set_peak_control(
+        {"enabled": enabled, "trigger_soc": 20, "start_time": "17:58", "end_time": "21:01", "power": 30}
+    )
+    assert calls_to(mock_api, "/v2/SetPeakControlSetting")[-1]["peakControlEnable"] == sent
 
 
 async def test_load_control_payload(hass: HomeAssistant, init_integration, mock_api) -> None:
@@ -174,11 +182,12 @@ async def test_load_control_payload(hass: HomeAssistant, init_integration, mock_
     })
     assert calls_to(mock_api, "/v2/SetLoadControlSetting")[-1] == {
         "deviceSn": DEVICE_SN,
-        # UNVERIFIED on hardware: spec p33 "0: Open / 1: Close" — may mean the relay, not on/off.
-        "loadSwitch": "1",
+        # Spec p33 "0: Open / 1: Close", "when turned on …" — same convention as Peak Control
+        # (0 = on). UNVERIFIED on hardware; follows the spec because peakControlEnable proved it right.
+        "loadSwitch": "0",
         "forceCloseTime": "22:00-06:00",
-        "forceCloseOffGridOnly": "0",
-        "alwaysCloseOnGridMode": "1",
+        "forceCloseOffGridOnly": "1",
+        "alwaysCloseOnGridMode": "0",
         "relayCloseSoc": "80",
         "relayOpenSoc": "20",
         "pvPowerThreshold": "500",
@@ -289,7 +298,7 @@ async def test_peak_stage_then_confirm(hass: HomeAssistant, init_integration, mo
         await _press(hass, entry, "peak_stage_button")
         await _press(hass, entry, "peak_confirm_button")
     assert calls_to(mock_api, "/v2/SetPeakControlSetting") == [{
-        "deviceSn": DEVICE_SN, "peakControlEnable": "1", "triggerSoc": "50",
+        "deviceSn": DEVICE_SN, "peakControlEnable": "0", "triggerSoc": "50",
         "timeRange": "17:58-21:01", "peakControlPower": "1000",
     }]
 

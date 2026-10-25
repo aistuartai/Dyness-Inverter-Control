@@ -189,9 +189,10 @@ or delete those cards; the core TOU controls work on their own.
 - **Discharge groups run at a fixed power.** A TOU *Discharge* group discharges at its set power whatever the
   house is using. To keep grid import near zero in a time window, Peak Control (which follows the load) works better.
 - **Grid power sign.** HA shows grid power positive when importing; the Dyness app shows it positive when exporting.
-- **On/off conventions.** The API documentation says `0 = On` for the TOU switches; the hardware uses `1 = On`, and
-  the integration follows the hardware. Peak and Load Control use the same convention but have not yet been
-  verified on hardware.
+- **On/off conventions differ by setting.** For the TOU group switches the hardware uses `1 = On` (the API documentation
+  says the opposite); for Peak Control the hardware uses `0 = On`, as documented. Load Control follows the documentation
+  (`0 = On`) but has not been verified on hardware. Versions before 2.8.2 sent Peak Control the wrong way round —
+  confirming "enabled" from HA switched it **off**.
 
 ## Troubleshooting
 
