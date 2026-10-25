@@ -96,7 +96,7 @@ Four charge/discharge groups, each with:
 | Start / End time | Time of day (windows may cross midnight) |
 | Mode | Charge / Discharge |
 | Days | Every day, weekdays, weekends, or a single day |
-| Power | 0 – 10,000 W (100 W steps) |
+| Power | 0 – 2,000 W (100 W steps) — the Dyness API limit |
 | Discharge depth limit | On / Off + 0–95 % |
 | Max charge SOC limit | On / Off + 10–100 % |
 
@@ -149,7 +149,7 @@ data:
       start_time: "12:00"
       end_time: "15:00"
       mode: charge
-      power: 5000
+      power: 2000
       days: "0,1,2,3,4,5,6"
     - group: 2
       enabled: false
@@ -183,6 +183,9 @@ or delete those cards; the core TOU controls work on their own.
 
 ## Good to know
 
+- **TOU power is limited to 2,000 W through the API.** Dyness rejects higher values ("Request parameter
+  exception") even though the inverter can charge faster; the Dyness app still accepts higher rates. Set fast-charge
+  groups in the app, or keep HA-managed groups at 2,000 W or below. Stage catches values that are too high.
 - **No read-back for schedules.** The Dyness API cannot read the TOU, peak or load settings back, so HA shows
   what it last sent (restored across restarts). Changes made in the Dyness app are not seen by HA, and confirming
   from HA overwrites them.

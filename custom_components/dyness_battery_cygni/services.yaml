@@ -17,6 +17,7 @@ set_tou_schedule:
       name: Groups
       description: >
         List of up to 4 TOU groups. Each group defines a time window and charge/discharge behaviour.
+        Times are HH:mm; power is 0-2000 W (the Dyness API limit — set higher rates in the Dyness app).
       required: true
       example:
         - group: 1

@@ -25,6 +25,7 @@ from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import DOMAIN
+from .payloads import TOU_MAX_POWER, tou_schedule
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -280,7 +281,7 @@ def TouPowerNumber(coordinator, entry, group: int) -> _TouNumber:
     return _TouNumber(
         coordinator, entry, group,
         suffix="power", ref_key=f"g{group}_power",
-        min_v=0, max_v=10000, step=100,
+        min_v=0, max_v=TOU_MAX_POWER, step=100,
         unit=UnitOfPower.WATT, icon="mdi:lightning-bolt",
         tk=f"tou_g{group}_power", default=_DEFAULT_POWER,
     )
@@ -414,6 +415,9 @@ class TouStageButton(CoordinatorEntity, ButtonEntity):
                 "soc_max_enabled": soc_en,
                 "soc_max":         soc_max,
             })
+
+        # Validate exactly as Confirm will, so problems show up while previewing.
+        tou_schedule(self.coordinator.device_sn, groups)
 
         self.coordinator._staged_tou = groups
         _LOGGER.info("Dyness TOU: staged %d groups for review", len(groups))

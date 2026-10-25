@@ -27,7 +27,7 @@ def _coordinator(hass: HomeAssistant, entry):
 def _group(**overrides) -> dict:
     g = {
         "group": 1, "enabled": True, "start_time": "12:00", "end_time": "15:00",
-        "mode": "charge", "days": "0,1,2,3,4,5,6", "power": 5000,
+        "mode": "charge", "days": "0,1,2,3,4,5,6", "power": 2000,
         "dod_enabled": True, "dod": 20, "soc_max_enabled": True, "soc_max": 100,
     }
     g.update(overrides)
@@ -46,7 +46,7 @@ async def test_tou_payload_golden(hass: HomeAssistant, init_integration, mock_ap
             "state": "1",                    # spec p30 says 0=On; hardware is 1=On (fixed 2.5.6)
             "startTime": "12:00",            # HH:mm
             "endTime": "15:00",
-            "power": "5000",
+            "power": "2000",                 # API maximum (spec p30), enforced by Dyness since ~2026-10
             "mode": "0",                     # 0=Charge, 1=Discharge (spec and hardware agree)
             "week": "0,1,2,3,4,5,6",         # Monday=0 (spec never says; confirmed 2.5.4)
             "dodState": "1",                 # same inversion as "state"
@@ -72,7 +72,8 @@ async def test_tou_spec_p31_example(hass: HomeAssistant, init_integration, mock_
     ({"mode": "Discharge"}, "mode", "1"),
     ({"dod_enabled": False}, "dodState", "0"),
     ({"soc_max_enabled": False}, "socMaxChargeState", "0"),
-    ({"power": 10000}, "power", "10000"),    # spec p30 caps at 2000; Cygni 10 kW verified to 10000 (2.6.1)
+    ({"power": 2000}, "power", "2000"),      # spec p30 limit; 2100 W rejected by Dyness 2026-10-25
+    ({"enabled": False, "power": 8000}, "power", "2000"),   # disabled groups are clamped, not rejected
     ({"power": 0}, "power", "0"),
 ])
 async def test_tou_field_encoding(hass: HomeAssistant, init_integration, mock_api, overrides, field, value) -> None:
@@ -83,8 +84,10 @@ async def test_tou_field_encoding(hass: HomeAssistant, init_integration, mock_ap
 @pytest.mark.parametrize(("groups", "message"), [
     ([], "non-empty"),
     ([_group(group=5)], "group must be 1-4"),
-    ([_group(power=10001)], "power must be 0-10000W"),
-    ([_group(power=-1)], "power must be 0-10000W"),
+    ([_group(power=2001)], "power must be 0-2000 W"),
+    ([_group(power=9000)], "Dyness API limits TOU power to 2000 W"),
+    ([_group(power=-1)], "power must be 0-2000 W"),
+    ([_group(start_time="22:00:00")], "start_time must be HH:mm"),
     ([_group(dod=96)], "dod must be 0-95%"),
     ([_group(soc_max=9)], "soc_max must be 10-100%"),
     ([_group(soc_max=101)], "soc_max must be 10-100%"),
@@ -209,7 +212,7 @@ async def test_tou_stage_then_confirm(hass: HomeAssistant, init_integration, moc
     await _call(hass, "switch", "turn_on", entity_id(hass, entry, "switch", "tou_g1_enabled"))
     await _call(hass, "time", "set_value", entity_id(hass, entry, "time", "tou_g1_start"), time="12:02:00")
     await _call(hass, "time", "set_value", entity_id(hass, entry, "time", "tou_g1_end"), time="14:58:00")
-    await _call(hass, "number", "set_value", entity_id(hass, entry, "number", "tou_g1_power"), value=9000)
+    await _call(hass, "number", "set_value", entity_id(hass, entry, "number", "tou_g1_power"), value=2000)
     await _call(hass, "select", "select_option", entity_id(hass, entry, "select", "tou_g1_days"), option="Weekdays")
 
     with patch("custom_components.dyness_battery_cygni.tou_entities.pn_async_create") as notify:
@@ -228,7 +231,7 @@ async def test_tou_stage_then_confirm(hass: HomeAssistant, init_integration, moc
     assert len(groups) == 4, "every TOU write sends all four groups"
     assert groups[0] == {
         "batteryWorkGroup": 1, "state": "1", "startTime": "12:02", "endTime": "14:58",
-        "power": "9000", "mode": "0", "week": "0,1,2,3,4",
+        "power": "2000", "mode": "0", "week": "0,1,2,3,4",
         "dodState": "1", "dod": "20", "socMaxChargeState": "1", "batterySocMaxCharge": "100",
     }
     # Untouched groups go out disabled with the entity defaults.
@@ -258,6 +261,36 @@ async def test_tou_stage_rejects_enabled_group_with_zero_power(hass: HomeAssista
     await _call(hass, "number", "set_value", entity_id(hass, entry, "number", "tou_g2_power"), value=0)
     with pytest.raises(HomeAssistantError, match="Group 2: power must be > 0"):
         await _press(hass, entry, "tou_stage_button")
+
+
+async def test_tou_stage_rejects_restored_power_above_api_limit(hass: HomeAssistant, mock_config_entry, mock_api) -> None:
+    """Values saved before 2.8.2 (e.g. 9000 W) are caught while staging, with a clear message."""
+    from homeassistant.core import State
+    from pytest_homeassistant_custom_component.common import mock_restore_cache
+
+    mock_restore_cache(hass, [
+        State("switch.test_station_tou_group_1_enabled", "on"),
+        State("number.test_station_tou_group_1_power", "9000.0"),
+        State("number.test_station_tou_group_4_power", "8000.0"),       # disabled: clamped, fine
+    ])
+    mock_config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+    with pytest.raises(HomeAssistantError, match="TOU group 1: power must be 0-2000 W, got 9000 W"):
+        await _press(hass, mock_config_entry, "tou_stage_button")
+    assert not calls_to(mock_api, TOU_PATH)
+
+
+async def test_tou_power_slider_max_is_api_limit(hass: HomeAssistant, init_integration) -> None:
+    state = hass.states.get(entity_id(hass, init_integration, "number", "tou_g1_power"))
+    assert state.attributes["max"] == 2000
+
+
+async def test_request_parameter_exception_gets_a_hint(hass: HomeAssistant, init_integration, mock_api) -> None:
+    mock_api.clear_requests()
+    mock_api.post(f"{URL_PREFIX}{TOU_PATH}", json={"code": "500", "data": None, "info": "Request parameter exception"})
+    with pytest.raises(HomeAssistantError, match="rejected one of the values"):
+        await _coordinator(hass, init_integration).async_set_tou_schedule([_group()])
 
 
 async def test_tou_stage_rejects_equal_start_and_end(hass: HomeAssistant, init_integration) -> None:
@@ -331,9 +364,9 @@ async def test_load_stage_rejects_open_soc_not_below_close(hass: HomeAssistant, 
 # ── Service ──────────────────────────────────────────────────────────────────
 
 async def test_set_tou_schedule_service(hass: HomeAssistant, init_integration, mock_api) -> None:
-    await hass.services.async_call(DOMAIN, "set_tou_schedule", {"groups": [_group(group=4, power=8000)]}, blocking=True)
+    await hass.services.async_call(DOMAIN, "set_tou_schedule", {"groups": [_group(group=4, power=1500)]}, blocking=True)
     group = calls_to(mock_api, TOU_PATH)[-1]["workGroups"][0]
-    assert (group["batteryWorkGroup"], group["power"]) == (4, "8000")
+    assert (group["batteryWorkGroup"], group["power"]) == (4, "1500")
 
 
 @pytest.mark.parametrize("bad", ["22:00:00", "7:00", "24:00", "12:60", ""])

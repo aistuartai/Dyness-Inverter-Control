@@ -177,7 +177,12 @@ class DynessDataCoordinator(DataUpdateCoordinator):
     async def _write(self, path: str, body: dict, label: str) -> None:
         result = await self._client.call(path, body)
         if not _is_success(result):
-            raise HomeAssistantError(f"Dyness {label} failed: {result.get('info', result)}")
+            info = result.get("info", result)
+            hint = (
+                " — Dyness rejected one of the values (e.g. TOU power above 2000 W)."
+                if info == "Request parameter exception" else ""
+            )
+            raise HomeAssistantError(f"Dyness {label} failed: {info}{hint}")
         _LOGGER.info("Dyness %s: success (device %s)", label, self.device_sn)
         await self.async_request_refresh()
 

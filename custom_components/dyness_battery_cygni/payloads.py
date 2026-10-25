@@ -16,6 +16,12 @@ from homeassistant.exceptions import HomeAssistantError
 
 _HHMM = re.compile(r"^([01]\d|2[0-3]):[0-5]\d$")   # spec p30: HH:mm, nothing else
 
+# The API rejects TOU group power above 2000 W ("Request parameter exception"), as documented in
+# spec p30. Larger values were accepted before (10 kW verified in 2.6.1); Dyness enforces the limit
+# server-side since about 2026-10 — confirmed on a Cygni 2026-10-25 (2000 W ok, 2100 W rejected).
+# The Dyness app still allows higher rates.
+TOU_MAX_POWER = 2000
+
 WORK_MODES = {"0", "2", "3"}   # Self-use, Backup, TOU. Off-grid (1) must be set on the inverter.
 
 
@@ -49,8 +55,14 @@ def tou_schedule(device_sn: str | None, groups: list) -> dict:
         if group_num not in (1, 2, 3, 4):
             raise HomeAssistantError(f"group must be 1-4, got {group_num}")
         power = int(g.get("power", 0))
-        if not 0 <= power <= 10000:
-            raise HomeAssistantError(f"power must be 0-10000W, got {power}")
+        enabled = g.get("enabled", True)
+        if power < 0 or (enabled and power > TOU_MAX_POWER):
+            raise HomeAssistantError(
+                f"TOU group {group_num}: power must be 0-{TOU_MAX_POWER} W, got {power} W. "
+                "The Dyness API limits TOU power to 2000 W; set higher rates in the Dyness app."
+            )
+        if not enabled:
+            power = min(power, TOU_MAX_POWER)   # irrelevant while disabled, but the API still checks it
         dod = int(g.get("dod", 20))
         if not 0 <= dod <= 95:
             raise HomeAssistantError(f"dod must be 0-95%, got {dod}")
@@ -62,7 +74,7 @@ def tou_schedule(device_sn: str | None, groups: list) -> dict:
             raise HomeAssistantError(f"soc_max must be 10-100%, got {soc_max}")
         api_groups.append({
             "batteryWorkGroup":    group_num,
-            "state":               _on_off(g.get("enabled", True)),
+            "state":               _on_off(enabled),
             "startTime":           str(g["start_time"]),
             "endTime":             str(g["end_time"]),
             "power":               str(power),
