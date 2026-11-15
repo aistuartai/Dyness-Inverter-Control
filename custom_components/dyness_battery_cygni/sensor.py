@@ -35,8 +35,8 @@ SENSORS = [
     ("energyChargeTotal",      "energy_charge_total",    UnitOfEnergy.KILO_WATT_HOUR,  SensorDeviceClass.ENERGY,      SensorStateClass.TOTAL_INCREASING, "mdi:battery-charging-100",   None, None),
     ("energyDischargeTotal",   "energy_discharge_total", UnitOfEnergy.KILO_WATT_HOUR,  SensorDeviceClass.ENERGY,      SensorStateClass.TOTAL_INCREASING, "mdi:battery-minus-outline",  None, None),
     ("cycleCount",             "cycle_count",            None,                         None,                          SensorStateClass.TOTAL_INCREASING, "mdi:battery-sync",           None, None),
-    ("usableKwh",              "usable_kwh",             UnitOfEnergy.KILO_WATT_HOUR,  SensorDeviceClass.ENERGY,      None,                              "mdi:battery-heart",          None, None),
-    ("remainingKwh",           "remaining_kwh",          UnitOfEnergy.KILO_WATT_HOUR,  SensorDeviceClass.ENERGY,      None,                              "mdi:battery-charging",       None, None),
+    ("usableKwh",              "usable_kwh",             UnitOfEnergy.KILO_WATT_HOUR,  SensorDeviceClass.ENERGY_STORAGE, SensorStateClass.MEASUREMENT, "mdi:battery-heart",          None, None),
+    ("remainingKwh",           "remaining_kwh",          UnitOfEnergy.KILO_WATT_HOUR,  SensorDeviceClass.ENERGY_STORAGE, SensorStateClass.MEASUREMENT, "mdi:battery-charging",       None, None),
     # Max Lade-/Entladestrom (Diagnostic)
     ("chargeCurrentLimit",     "charge_current_limit",   UnitOfElectricCurrent.AMPERE, SensorDeviceClass.CURRENT,     SensorStateClass.MEASUREMENT,      "mdi:current-ac",             None, _D),
     ("dischargeCurrentLimit",  "discharge_current_limit",UnitOfElectricCurrent.AMPERE, SensorDeviceClass.CURRENT,     SensorStateClass.MEASUREMENT,      "mdi:current-ac",             None, _D),
@@ -117,7 +117,7 @@ SENSORS = [
     ("meterCommunicationStatus", "meter_communication_status", None,                             None,                             None,                              "mdi:lan-connect",            None, _D),
     # ── Diagnose ─────────────────────────────────────────────────────────────
     ("createTime",             "last_update",            None,                         None,                          None,                              "mdi:clock-outline",          None, _D),
-    ("batteryCapacity",        "battery_capacity",       UnitOfEnergy.KILO_WATT_HOUR,  SensorDeviceClass.ENERGY,      None,                              "mdi:battery",                None, _D),
+    ("batteryCapacity",        "battery_capacity",       UnitOfEnergy.KILO_WATT_HOUR,  SensorDeviceClass.ENERGY_STORAGE, SensorStateClass.MEASUREMENT, "mdi:battery",                None, _D),
     ("deviceCommunicationStatus", "communication_status", None,                        None,                          None,                              "mdi:wifi",                   None, _D),
     ("firmwareVersion",        "firmware_version",       None,                         None,                          None,                              "mdi:chip",                   None, _D),
     ("workStatus",             "work_status",            None,                         None,                          None,                              "mdi:home-battery",           None, _D),

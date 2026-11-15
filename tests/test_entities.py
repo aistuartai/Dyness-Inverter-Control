@@ -61,6 +61,25 @@ async def test_each_setting_lives_on_exactly_one_platform(hass: HomeAssistant, i
     assert [uid for uid, n in per_uid.items() if n > 1] == []
 
 
+async def test_numeric_sensors_with_unit_record_statistics(hass: HomeAssistant, init_integration) -> None:
+    """Without a state_class HA keeps no long-term statistics, so the recorder purge drops the history."""
+    missing = [
+        e.entity_id for e in _registry(hass, init_integration)
+        if e.domain == "sensor"
+        and (st := hass.states.get(e.entity_id)) is not None
+        and st.attributes.get("unit_of_measurement")
+        and not st.attributes.get("state_class")
+    ]
+    assert missing == []
+
+
+async def test_stored_energy_sensors_use_energy_storage(hass: HomeAssistant, init_integration) -> None:
+    # HA only allows total/total_increasing on ENERGY (meter-style); energy held is ENERGY_STORAGE + measurement.
+    for suffix in ("usableKwh", "remainingKwh", "batteryCapacity"):
+        attrs = hass.states.get(entity_id(hass, init_integration, "sensor", suffix)).attributes
+        assert (attrs["device_class"], attrs["state_class"]) == ("energy_storage", "measurement"), suffix
+
+
 async def test_misplatformed_duplicates_removed_on_upgrade(hass: HomeAssistant, mock_config_entry, mock_api) -> None:
     """Installs before 2.8.0 have number.* entries for peak/load times and time.* entries for
     the settings numbers; setup must delete them and keep the correct ones."""
